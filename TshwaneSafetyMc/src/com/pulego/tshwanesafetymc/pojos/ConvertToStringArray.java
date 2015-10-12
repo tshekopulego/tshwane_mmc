@@ -8,42 +8,42 @@ public class ConvertToStringArray {
     public ConvertToStringArray() {
 		super();
 	}
-	public String[] getStringIncidentsDate(List<Incidents> list){
+	public String[] getStringArrayIncidentsDate(List<Incidents> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getDateOfIncidents();
     	}
 		return arrayDate;
     }
-    public int[] getStringIncidentsTotal(List<Incidents> list){
+    public int[] getStringArrayIncidentsTotal(List<Incidents> list){
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getTotalNoOfIncidents();
     	}
 		return arraytotal;
     }
-    public String[] getStringStatusDate(List<Status> list){
+    public String[] getStringArrayStatusDate(List<Status> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getStatusName();
     	}
 		return arrayDate;
     }
-    public int[] getStringStatusTotal(List<Status> list){
+    public int[] getStringArrayStatusTotal(List<Status> list){
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getStatusTotal();
     	}
 		return arraytotal;
     }
-    public String[] getStringTypeDate(List<Type> list){
+    public String[] getStringArrayTypeDate(List<Type> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getTypeName();
     	}
 		return arrayDate;
     }
-    public int[] getStringTypeTotal(List<Type> list){
+    public int[] getStringArrayTypeTotal(List<Type> list){
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getTotalType();
