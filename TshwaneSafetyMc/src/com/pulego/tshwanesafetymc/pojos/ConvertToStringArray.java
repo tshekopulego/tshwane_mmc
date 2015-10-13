@@ -22,28 +22,28 @@ public class ConvertToStringArray {
     	}
 		return arraytotal;
     }
-    public String[] getStringArrayStatusDate(List<Status> list){
+    public String[] getStringArrayStatusDate(List<ObjectStatus> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getStatusName();
     	}
 		return arrayDate;
     }
-    public int[] getStringArrayStatusTotal(List<Status> list){
+    public int[] getStringArrayStatusTotal(List<ObjectStatus> list){
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getStatusTotal();
     	}
 		return arraytotal;
     }
-    public String[] getStringArrayTypeDate(List<Type> list){
+    public String[] getStringArrayTypeDate(List<ObjectType> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getTypeName();
     	}
 		return arrayDate;
     }
-    public int[] getStringArrayTypeTotal(List<Type> list){
+    public int[] getStringArrayTypeTotal(List<ObjectType> list){
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getTotalType();

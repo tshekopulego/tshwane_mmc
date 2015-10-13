@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.pulego.tshwanesafetymc.pojos.Incidents;
-import com.pulego.tshwanesafetymc.pojos.Status;
-import com.pulego.tshwanesafetymc.pojos.Type;
+import com.pulego.tshwanesafetymc.pojos.ObjectStatus;
+import com.pulego.tshwanesafetymc.pojos.ObjectType;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -151,7 +151,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 /**
      * Creating type
      */
-	public long createType(Type type) {
+	public long createType(ObjectType type) {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
@@ -167,8 +167,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	/*
 	 * Getting type
 	 * */
-	 public List<Type> getAllType() {
-	        List<Type> type = new ArrayList<Type>();
+	 public List<ObjectType> getAllType() {
+	        List<ObjectType> type = new ArrayList<ObjectType>();
 	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_STATUS;
 	 
 	        Log.e(LOG, selectQuery);
@@ -179,7 +179,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	        // looping through all rows and adding to list
 	        if (c.moveToFirst()) {
 	            do {
-	                Type t = new Type();
+	                ObjectType t = new ObjectType();
 	                t.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 	                t.setTypeName(c.getString(c.getColumnIndex(KEY_TYPE_NAME)));
 	                t.setTotalType(c.getInt((c.getColumnIndex(KEY_TYPE_TOTAL))));
@@ -192,7 +192,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 /**
      * Creating status
      */
-	public long createSatus(Status status) {
+	public long createSatus(ObjectStatus status) {
         SQLiteDatabase db = this.getWritableDatabase();
  
         ContentValues values = new ContentValues();
@@ -208,8 +208,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	/*
 	 * Getting Status
 	 * */
-	 public List<Status> getAllSatus() {
-	        List<Status> status = new ArrayList<Status>();
+	 public List<ObjectStatus> getAllSatus() {
+	        List<ObjectStatus> status = new ArrayList<ObjectStatus>();
 	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_STATUS;
 	 
 	        Log.e(LOG, selectQuery);
@@ -220,7 +220,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	        // looping through all rows and adding to list
 	        if (c.moveToFirst()) {
 	            do {
-	                Status s = new Status();
+	                ObjectStatus s = new ObjectStatus();
 	                s.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 	                s.setStatusName(c.getString(c.getColumnIndex(KEY_STATUS_NAME)));
 	                s.setStatusTotal(c.getInt((c.getColumnIndex(KEY_STATUS_TOTAL))));
@@ -230,40 +230,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	        }
 	        return status;
 	    }
-  /*  public long createTag(Tag tag) {
-        SQLiteDatabase db = this.getWritableDatabase();
- 
-        ContentValues values = new ContentValues();
-        values.put(KEY_TAG_NAME, tag.getTagName());
-        values.put(KEY_CREATED_AT, getDateTime());
- 
-        // insert row
-        long tag_id = db.insert(TABLE_TAG, null, values);
- 
-        return tag_id;
-    }
-	 public List<Tag> getAllTags() {
-	        List<Tag> tags = new ArrayList<Tag>();
-	        String selectQuery = "SELECT  * FROM " + TABLE_TAG;
-	 
-	        Log.e(LOG, selectQuery);
-	 
-	        SQLiteDatabase db = this.getReadableDatabase();
-	        Cursor c = db.rawQuery(selectQuery, null);
-	 
-	        // looping through all rows and adding to list
-	        if (c.moveToFirst()) {
-	            do {
-	                Tag t = new Tag();
-	                t.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-	                t.setTagName(c.getString(c.getColumnIndex(KEY_TAG_NAME)));
-	 
-	                // adding to tags list
-	                tags.add(t);
-	            } while (c.moveToNext());
-	        }
-	        return tags;
-	    }*/
+
 	// closing database
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
