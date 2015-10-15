@@ -2,6 +2,8 @@ package com.pulego.tshwanesafetymc.pojos;
 
 import java.util.List;
 
+import android.util.Log;
+
 public class ConvertToStringArray {
 	private int id;
 	
@@ -12,6 +14,7 @@ public class ConvertToStringArray {
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getDateOfIncidents();
+    		Log.d("Data in Convertor", list.get(i).getDateOfIncidents());
     	}
 		return arrayDate;
     }
@@ -19,13 +22,15 @@ public class ConvertToStringArray {
     	int[] arraytotal =new int[list.size()];
     	for(int i=0;i>list.size();i++){
     		arraytotal[i]=list.get(i).getTotalNoOfIncidents();
+    		Log.d("Data in Convertor", ""+list.get(i).getTotalNoOfIncidents());
     	}
 		return arraytotal;
     }
-    public String[] getStringArrayStatusDate(List<ObjectStatus> list){
+    public String[] getStringArrayStatusName(List<ObjectStatus> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getStatusName();
+    		
     	}
 		return arrayDate;
     }
@@ -36,7 +41,7 @@ public class ConvertToStringArray {
     	}
 		return arraytotal;
     }
-    public String[] getStringArrayTypeDate(List<ObjectType> list){
+    public String[] getStringArrayTypeName(List<ObjectType> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getTypeName();

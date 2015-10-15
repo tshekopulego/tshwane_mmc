@@ -119,7 +119,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, getDateTime());
  
         // insert row
-        long incidents_id = db.insert(TABLE_TAG, null, values);
+        long incidents_id = db.insert(TABLE_NO_OF_INCIDENTS, null, values);
  
         return incidents_id;
     }
@@ -128,7 +128,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * */
 	 public List<Incidents> getAllIncidents() {
 	        List<Incidents> incidents = new ArrayList<Incidents>();
-	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_STATUS;
+	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_INCIDENTS;
 	 
 	        Log.e(LOG, selectQuery);
 	 
@@ -160,7 +160,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, getDateTime());
  
         // insert row
-        long type_id = db.insert(TABLE_TAG, null, values);
+        long type_id = db.insert(TABLE_NO_OF_TYPES, null, values);
  
         return type_id;
     }
@@ -169,7 +169,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * */
 	 public List<ObjectType> getAllType() {
 	        List<ObjectType> type = new ArrayList<ObjectType>();
-	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_STATUS;
+	        String selectQuery = "SELECT  * FROM " + TABLE_NO_OF_TYPES;
 	 
 	        Log.e(LOG, selectQuery);
 	 
@@ -201,7 +201,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, getDateTime());
  
         // insert row
-        long type_id = db.insert(TABLE_TAG, null, values);
+        long type_id = db.insert(TABLE_NO_OF_STATUS, null, values);
  
         return type_id;
     }

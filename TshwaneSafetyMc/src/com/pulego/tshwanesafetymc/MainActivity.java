@@ -1,5 +1,7 @@
 package com.pulego.tshwanesafetymc;
 
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,8 +28,11 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				email=txtEmail.getText().toString();
 				password=txtPassword.getText().toString();
+				UrlConnectHome urlconnect=new UrlConnectHome(getApplicationContext());
+				urlconnect.initialization();
 				final Intent home=new Intent(getApplicationContext(), HomeActivity.class);
 				home.putExtra("USER_EMAIL", email);
+				
 				startActivity(home);
 			}
 		});

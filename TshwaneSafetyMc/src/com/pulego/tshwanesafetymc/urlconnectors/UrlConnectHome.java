@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
@@ -23,9 +24,9 @@ public class UrlConnectHome {
     private Incidents objIncidents;
     private Context context;
     //urls to connect
-    String url_request_type="http://196.33.249.226/android/tshwanesafety/managementconsole/get_strength_report.php";
-    String url_request_status="http://196.33.249.226/android/tshwanesafety/managementconsole/get_strength_report.php";
-    String url_request_incidents="http://196.33.249.226/android/tshwanesafety/managementconsole/get_strength_report.php";
+    String url_request_type="http://196.33.249.226/android/tshwanesafety/managementconsole/get_type_request.php";
+    String url_request_status="http://196.33.249.226/android/tshwanesafety/managementconsole/get_status_request.php";
+    String url_request_incidents="http://196.33.249.226/android/tshwanesafety/managementconsole/get_incidents_request.php";
 	
  // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
@@ -41,12 +42,18 @@ public class UrlConnectHome {
     
    public UrlConnectHome(Context context) {
 		super();
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+		  .penaltyLog().build());
 		this.context=context;
 		objIncidents = new Incidents();
 		objType = new ObjectType();
 		objStatus = new ObjectStatus();
 	}
    public void initialization(){
+	   StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+		  .penaltyLog().build());
 	   populateTblIncidents();
 	   populateTblStatus();
 	   populateTblType();
@@ -79,9 +86,11 @@ public class UrlConnectHome {
                    // Storing each json item in variable
                    String date = c.getString("date") ;
                    int total = c.getInt("totalcount");
+                   Log.d("Data",date);
                   objIncidents=new Incidents(date, total);
                   db.createIncident(objIncidents);
                }
+               db.closeDB();
            } else {
                // no products found
         	   Log.e("log_incidents", "No data found");
@@ -117,6 +126,7 @@ public class UrlConnectHome {
                    // Storing each json item in variable
                    String statusName = c.getString("status") ;
                    int total = c.getInt("totalcount");
+                   Log.d("Data",statusName);
                    objStatus = new ObjectStatus(statusName, total);
                    db.createSatus(objStatus);
                }
@@ -156,6 +166,7 @@ public class UrlConnectHome {
                    // Storing each json item in variable
                    String typeName = c.getString("type") ;
                    int total = c.getInt("totalcount");
+                   Log.d("Data",typeName);
                    objType = new ObjectType(typeName, total);
                    db.createType(objType);
                    

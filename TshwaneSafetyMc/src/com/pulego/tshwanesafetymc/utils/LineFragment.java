@@ -12,6 +12,7 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.pulego.tshwanesafetymc.R;
+import com.pulego.tshwanesafetymc.convertors.IncidentsConverted;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -31,6 +32,9 @@ public class LineFragment extends Fragment {
 	private String[] mMonth = new String[] {
 			"Jan", "Feb" , "Mar", "Apr", "May", "Jun",
 			"Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"};
+	//creating an object that will return two arrays, array of integers and arrays of strings
+	private IncidentsConverted objArrays;
+	
 	public LineFragment(){
 	}
    @Override
@@ -39,52 +43,77 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	// TODO Auto-generated method stub
 	   View rootView = inflater.inflate(R.layout.line_chat_layout, container, false);
 		 chartLayout = (LinearLayout) rootView.findViewById(R.id.chart);
+		 objArrays=new IncidentsConverted(rootView.getContext());
 		 openChart(rootView.getContext(),chartLayout);
 	return rootView;
 }
    public void openChart(Context c, LinearLayout l) {
 		// TODO Auto-generated method stub
 
-		    	int[] x = { 0,1,2,3,4,5,6,7, 8, 9, 10, 11 };
+		    	//int[] x = { 0,1,2,3,4,5,6,7, 8, 9, 10, 11 };
+		    	int[] x = { 0,1,2,3,4,5,6 };
 
-		    	int[] income = { 2000,2500,2700,3000,2800,3500,3700,3800, 0,0,0,0};
+		    	//int[] income = { 2000,2500,2700,3000,2800,3500,3700,3800, 0,0,0,0};
 
-		    	int[] expense = {2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0, 0, 0 };
-
+		    	//int[] expense = {2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0, 0, 0 };
+                int[] incidents = objArrays.getArrayIncidentsTotal();
+                String[] mDate= objArrays.getArrayIncidentsDate();
 		    	// Creating an XYSeries for Income
-		    	XYSeries incomeSeries = new XYSeries("Income");
-
+		    	//XYSeries incomeSeries = new XYSeries("Income");
+		    	XYSeries incidentsSeries = new XYSeries("Incidents");
 		    	// Creating an XYSeries for Expense
 
-		    	XYSeries expenseSeries = new XYSeries("Expense");
+		    	//XYSeries expenseSeries = new XYSeries("Expense");
 
 		    	// Adding data to Income and Expense Series
 
 		    	for(int i=0;i<x.length;i++){
 
-		    	incomeSeries.add(i,income[i]);
+		    	incidentsSeries.add(i, incidents[i]);
+		    	//incomeSeries.add(i,income[i]);
 
-		    	expenseSeries.add(i,expense[i]);
+		    	//expenseSeries.add(i,expense[i]);
 
 		    	}
 
 		    	 
 
 		    	// Creating a dataset to hold each series
-
+                
 		    	XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
 		    	// Adding Income Series to the dataset
-
-		    	dataset.addSeries(incomeSeries);
+		    	dataset.addSeries(incidentsSeries);
+		    	//dataset.addSeries(incomeSeries);
 
 		    	// Adding Expense Series to dataset
 
-		    	dataset.addSeries(expenseSeries);
-
+		    	//dataset.addSeries(expenseSeries);
+              
 		    	// Creating XYSeriesRenderer to customize incomeSeries
+		    	XYSeriesRenderer incidentsRenderer = new XYSeriesRenderer();
 
-		    	XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
+		    	incidentsRenderer.setColor(Color.BLUE); //color of the graph set to cyan
+
+		    	incidentsRenderer.setFillPoints(true);
+
+		    	incidentsRenderer.setLineWidth(2f);
+
+		    	incidentsRenderer.setDisplayChartValues(true);
+
+		    	//setting chart value distance
+
+		    	incidentsRenderer.setDisplayChartValuesDistance(10);
+
+		    	//setting line graph point style to circle
+
+		    	incidentsRenderer.setPointStyle(PointStyle.CIRCLE);
+
+		    	//setting stroke of the line chart to solid
+
+		    	incidentsRenderer.setStroke(BasicStroke.SOLID);
+		    	
+		    	/*XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
 
 		    	incomeRenderer.setColor(Color.CYAN); //color of the graph set to cyan
 
@@ -124,13 +153,14 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting stroke of the line chart to solid
 
-		    	expenseRenderer.setStroke(BasicStroke.SOLID);
+		    	expenseRenderer.setStroke(BasicStroke.SOLID);*/
 
 		    	// Creating a XYMultipleSeriesRenderer to customize the whole chart
-
+               
 		    	XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
-
+            
 		    	multiRenderer.setXLabels(0);
+		    	
 		    	multiRenderer.setBackgroundColor(Color.BLACK);
 
 		    	multiRenderer.setChartTitle("Weekly Summary of Incidents");
@@ -150,7 +180,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting text size of the title
 
-		    	multiRenderer.setChartTitleTextSize(14);
+		    	multiRenderer.setChartTitleTextSize(16);
 
 		    	//setting text size of the axis title
 
@@ -227,7 +257,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	// if you use dynamic values then get the max y value and set here
 
-		    	multiRenderer.setYAxisMax(4000);
+		    	multiRenderer.setYAxisMax(60);
 
 		    	//setting used to move the graph on xaxiz to .5 to the right
 
@@ -235,7 +265,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting used to move the graph on xaxiz to .5 to the right
 
-		    	multiRenderer.setXAxisMax(11);
+		    	multiRenderer.setXAxisMax(7);
 
 		    	//setting bar size or space between two bars
 
@@ -260,7 +290,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	for(int i=0; i< x.length;i++){
 
-		    	multiRenderer.addXTextLabel(i, mMonth[i]);
+		    	multiRenderer.addXTextLabel(i, mDate[i]);
 
 		    	}
 
@@ -269,9 +299,10 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		    	// Note: The order of adding dataseries to dataset and renderers to multipleRenderer
 
 		    	// should be same
-		    	multiRenderer.addSeriesRenderer(incomeRenderer);
+		    	multiRenderer.addSeriesRenderer(incidentsRenderer);
+		    	//multiRenderer.addSeriesRenderer(incomeRenderer);
 
-		    	multiRenderer.addSeriesRenderer(expenseRenderer);
+		    	//multiRenderer.addSeriesRenderer(expenseRenderer);
 
 		    	//this part is used to display graph on the xml
 		    	LinearLayout chartContainer = (LinearLayout) l;

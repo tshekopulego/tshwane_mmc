@@ -6,6 +6,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.pulego.tshwanesafetymc.httpconfig.CustomHttpClient;
@@ -16,10 +18,16 @@ public class UrlConnectLogin {
  
 	public UrlConnectLogin() {
 		super();
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+		  .penaltyLog().build());
 	}
 	
    public UrlConnectLogin(Login logon) {
 	super();
+	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+	  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+	  .penaltyLog().build());
 	this.logon = logon;
 }
 
