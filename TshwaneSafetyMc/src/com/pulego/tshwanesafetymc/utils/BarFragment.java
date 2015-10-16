@@ -2,6 +2,7 @@ package com.pulego.tshwanesafetymc.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.BarChart.Type;
@@ -11,6 +12,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.pulego.tshwanesafetymc.R;
+import com.pulego.tshwanesafetymc.pojos.ObjectType;
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -34,7 +37,7 @@ public class BarFragment extends Fragment {
     private String[] mMonth = new String[] { "Jan", "Feb", "Mar", "Apr", "May",
             "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
  
-
+    UrlConnectHome urlConnect;
 	public BarFragment(){
 		
 	}
@@ -44,6 +47,8 @@ public class BarFragment extends Fragment {
 		// TODO Auto-generated method stub
 		   rootView = inflater.inflate(R.layout.bar_chat_layout, container, false);
 		   
+		   urlConnect = new UrlConnectHome(rootView.getContext());
+		   
 		   chartLayout=(LinearLayout)rootView.findViewById(R.id.barchart);
 			 
 		   openChart(rootView.getContext(), chartLayout);
@@ -51,57 +56,61 @@ public class BarFragment extends Fragment {
 		return rootView;
 	}
 	   private void openChart(Context c, LinearLayout l) {
-	        int[] x = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-	        int[] income = { 2000, 2500, 2700, 3000, 2800, 3500, 3700, 3800, 0, 0,
+		   
+		   
+	       // int[] x = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		   
+	      /*  int[] income = { 2000, 2500, 2700, 3000, 2800, 3500, 3700, 3800, 0, 0,
 	                0, 0 };
 	        int[] expense = { 2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0,
 	                0, 0 };
-	 
+	        int[] x = { 0, 1, 2, 3, 4, 5, 6 };*/
+	        List<ObjectType> listTYPE= urlConnect.populateTblType();
+	        
 	        // Creating an XYSeries for Income
-	        XYSeries incomeSeries = new XYSeries("Income");
+	       // XYSeries incomeSeries = new XYSeries("Income");
+	        XYSeries typeSeries = new XYSeries("Type");
 	        // Creating an XYSeries for Expense
-	        XYSeries expenseSeries = new XYSeries("Expense");
+	       // XYSeries expenseSeries = new XYSeries("Expense");
 	        // Adding data to Income and Expense Series
-	        for (int i = 0; i < x.length; i++) {
-	            incomeSeries.add(i, income[i]);
-	            expenseSeries.add(i, expense[i]);
+	        for (int i = 0; i < listTYPE.size(); i++) {
+	        	typeSeries.add(i, listTYPE.get(i).getTotalType());
+	          //  expenseSeries.add(i, expense[i]);
 	        }
 	 
 	        // Creating a dataset to hold each series
 	        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 	        // Adding Income Series to the dataset
-	        dataset.addSeries(incomeSeries);
+	        dataset.addSeries(typeSeries);
 	        // Adding Expense Series to dataset
-	        dataset.addSeries(expenseSeries);
+	        //dataset.addSeries(expenseSeries);
 	 
 	        // Creating XYSeriesRenderer to customize incomeSeries
-	        XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
-	        incomeRenderer.setColor(Color.RED); // color of the graph set to cyan
-	        incomeRenderer.setFillPoints(true);
-	        incomeRenderer.setLineWidth(2);
-	        incomeRenderer.setDisplayChartValues(true);
-	        incomeRenderer.setDisplayChartValuesDistance(10); // setting chart value
+	       // XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
+	        XYSeriesRenderer typeRenderer = new XYSeriesRenderer();
+	        typeRenderer.setColor(Color.CYAN); // color of the graph set to cyan
+	        typeRenderer.setFillPoints(true);
+	        typeRenderer.setLineWidth(2);
+	        typeRenderer.setDisplayChartValues(true);
+	        typeRenderer.setDisplayChartValuesDistance(10); // setting chart value
 	                                                            // distance
 	 
 	        // Creating XYSeriesRenderer to customize expenseSeries
-	        XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
+	       /* XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
 	        expenseRenderer.setColor(Color.GREEN);
 	        expenseRenderer.setFillPoints(true);
 	        expenseRenderer.setLineWidth(2);
-	        expenseRenderer.setDisplayChartValues(true);
+	        expenseRenderer.setDisplayChartValues(true);*/
 	 
 	        // Creating a XYMultipleSeriesRenderer to customize the whole chart
 	        XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
 	        multiRenderer
 	                .setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
 	        multiRenderer.setXLabels(0);
-	        multiRenderer.setChartTitle("Income vs Expense Chart");
-	    //  Date d=new Date();
-	       // String df=String.valueOf(DateFormat.format("YYYY", d.getDate()));
-	   // SimpleDateFormat df=new SimpleDateFormat("YYYY");
-	     // String date=df.format(d);
-	        multiRenderer.setXTitle("Year 2015");
-	        multiRenderer.setYTitle("Amount in Dollars");
+	        multiRenderer.setChartTitle("Weeky Trending Type of Incidents");
+	    
+	        multiRenderer.setXTitle("Name of Types");
+	        multiRenderer.setYTitle("Total Number of Types");
 	        multiRenderer.setBackgroundColor(Color.BLACK);
 	        /***
 	         * Customizing graphs
@@ -150,34 +159,37 @@ public class BarFragment extends Fragment {
 	        // setting y axis max value, Since i'm using static values inside the
 	        // graph so i'm setting y max value to 4000.
 	        // if you use dynamic values then get the max y value and set here
-	        multiRenderer.setYAxisMax(4000);
+	        multiRenderer.setYAxisMax(20);
 	        // setting used to move the graph on xaxiz to .5 to the right
 	        multiRenderer.setXAxisMin(-0.5);
 	        // setting max values to be display in x axis
-	        multiRenderer.setXAxisMax(11);
+	        multiRenderer.setXAxisMax(7);
 	        // setting bar size or space between two bars
 	        multiRenderer.setBarSpacing(0.5);
 	        // Setting background color of the graph to transparent
-	        multiRenderer.setBackgroundColor(Color.TRANSPARENT);
+	        multiRenderer.setBackgroundColor(Color.BLACK);
+	        
+	        multiRenderer.setMarginsColor(Color.WHITE);
 	        // Setting margin color of the graph to transparent
-	        multiRenderer.setMarginsColor(getResources().getColor(
-	                R.color.transparent_background));
+	       // multiRenderer.setMarginsColor(getResources().getColor(
+	            //    R.color.transparent_background));
 	        multiRenderer.setApplyBackgroundColor(true);
-	 
+	        multiRenderer.setXLabelsAngle(300);
+	        multiRenderer.setBarWidth(10);
 	        // setting the margin size for the graph in the order top, left, bottom,
 	        // right
 	        multiRenderer.setMargins(new int[] { 30, 30, 30, 30 });
 	 
-	        for (int i = 0; i < x.length; i++) {
-	            multiRenderer.addXTextLabel(i, mMonth[i]);
+	        for (int i = 0; i <listTYPE.size(); i++) {
+	            multiRenderer.addXTextLabel(i, listTYPE.get(i).getTypeName());
 	        }
 	 
 	        // Adding incomeRenderer and expenseRenderer to multipleRenderer
 	        // Note: The order of adding dataseries to dataset and renderers to
 	        // multipleRenderer
 	        // should be same
-	        multiRenderer.addSeriesRenderer(incomeRenderer);
-	        multiRenderer.addSeriesRenderer(expenseRenderer);
+	        multiRenderer.addSeriesRenderer(typeRenderer);
+	        //multiRenderer.addSeriesRenderer(expenseRenderer);
 	 
 	        // this part is used to display graph on the xml
 	        LinearLayout chartContainer = (LinearLayout) l;

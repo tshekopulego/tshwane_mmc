@@ -27,7 +27,8 @@ public class UrlConnectHome {
     String url_request_type="http://196.33.249.226/android/tshwanesafety/managementconsole/get_type_request.php";
     String url_request_status="http://196.33.249.226/android/tshwanesafety/managementconsole/get_status_request.php";
     String url_request_incidents="http://196.33.249.226/android/tshwanesafety/managementconsole/get_incidents_request.php";
-	
+    
+    List<Incidents> objICDTARRAY;
  // Creating JSON Parser object
     JSONParser jParser = new JSONParser();
     
@@ -59,7 +60,7 @@ public class UrlConnectHome {
 	   populateTblType();
 	   Log.d("Initialization_log", "Initialization successfully completed");
    }
-   public void populateTblIncidents(){
+   public List<Incidents> populateTblIncidents(){
 	   int count=0;
        // Building Parameters
        List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -72,13 +73,15 @@ public class UrlConnectHome {
        try {
            // Checking for SUCCESS TAG
            int success = json.getInt(TAG_SUCCESS);
-
+        
+   	      
            if (success == 1) {
-               // initailize db
-        	    db=new DatabaseOpenHelper(context);
+        	// initialize db
+        	      db=new DatabaseOpenHelper(context);
+        	//   db.deleteAll();
                // Getting Array of Products
                reports = json.getJSONArray(TAG_REPORT);
-
+               objICDTARRAY =new ArrayList<Incidents>();
                // looping through All Products
                for (int i = 0; i < reports.length(); i++) {
                    JSONObject c = reports.getJSONObject(i);
@@ -88,9 +91,11 @@ public class UrlConnectHome {
                    int total = c.getInt("totalcount");
                    Log.d("Data",date);
                   objIncidents=new Incidents(date, total);
+                  objICDTARRAY.add(objIncidents);
                   db.createIncident(objIncidents);
+                  db.closeDB();
                }
-               db.closeDB();
+               
            } else {
                // no products found
         	   Log.e("log_incidents", "No data found");
@@ -98,8 +103,10 @@ public class UrlConnectHome {
        } catch (JSONException e) {
            e.printStackTrace();
        }
+       return objICDTARRAY;
    }
-   public void populateTblStatus(){
+   public List<ObjectStatus> populateTblStatus(){
+	   List<ObjectStatus> listSTATUS = new ArrayList<ObjectStatus>();
 	   int count=0;
        // Building Parameters
        List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -114,8 +121,9 @@ public class UrlConnectHome {
            int success = json.getInt(TAG_SUCCESS);
 
            if (success == 1) {
-        	// initailize db
-       	    db=new DatabaseOpenHelper(context);
+        	// initialize db
+       	   // db=new DatabaseOpenHelper(context);
+       	   // db.deleteAll();
                // Getting Array of Products
                reports = json.getJSONArray(TAG_REPORT);
 
@@ -128,9 +136,10 @@ public class UrlConnectHome {
                    int total = c.getInt("totalcount");
                    Log.d("Data",statusName);
                    objStatus = new ObjectStatus(statusName, total);
-                   db.createSatus(objStatus);
+                   listSTATUS.add(objStatus);
+                  // db.createSatus(objStatus);
                }
-               db.closeDB();
+              // db.closeDB();
            } else {
                // no products found
         	   Log.e("log_status", "No data found");
@@ -138,8 +147,10 @@ public class UrlConnectHome {
        } catch (JSONException e) {
            e.printStackTrace();
        }
+	return listSTATUS;
    }
-   public void populateTblType(){
+   public List<ObjectType> populateTblType(){
+	   List<ObjectType> listTYPE = new ArrayList<ObjectType>();
 	   int count=0;
        // Building Parameters
        List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -155,7 +166,8 @@ public class UrlConnectHome {
 
            if (success == 1) {
         	// initailize db
-       	    db=new DatabaseOpenHelper(context);
+       	  //  db=new DatabaseOpenHelper(context);
+       	   // db.deleteAll();
                // Getting Array of Products
                reports = json.getJSONArray(TAG_REPORT);
 
@@ -168,10 +180,11 @@ public class UrlConnectHome {
                    int total = c.getInt("totalcount");
                    Log.d("Data",typeName);
                    objType = new ObjectType(typeName, total);
-                   db.createType(objType);
+                   listTYPE.add(objType);
+                   //db.createType(objType);
                    
                }
-             db.closeDB();
+             //db.closeDB();
            } else {
                // no products found
         	   Log.e("log_type", "No data found");
@@ -179,5 +192,6 @@ public class UrlConnectHome {
        } catch (JSONException e) {
            e.printStackTrace();
        }
+	return listTYPE;
    }
 }

@@ -1,5 +1,6 @@
 package com.pulego.tshwanesafetymc.pojos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
@@ -10,7 +11,7 @@ public class ConvertToStringArray {
     public ConvertToStringArray() {
 		super();
 	}
-	public String[] getStringArrayIncidentsDate(List<Incidents> list){
+	public String[] getStringArrayIncidentsDate(ArrayList<Incidents> list){
     	String[] arrayDate =new String[list.size()];
     	for(int i=0;i>list.size();i++){
     		arrayDate[i]=list.get(i).getDateOfIncidents();
@@ -18,9 +19,9 @@ public class ConvertToStringArray {
     	}
 		return arrayDate;
     }
-    public int[] getStringArrayIncidentsTotal(List<Incidents> list){
+    public int[] getStringArrayIncidentsTotal(ArrayList<Incidents> list){
     	int[] arraytotal =new int[list.size()];
-    	for(int i=0;i>list.size();i++){
+    	for(int i=0;i>arraytotal.length;i++){
     		arraytotal[i]=list.get(i).getTotalNoOfIncidents();
     		Log.d("Data in Convertor", ""+list.get(i).getTotalNoOfIncidents());
     	}

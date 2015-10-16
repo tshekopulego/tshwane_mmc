@@ -21,17 +21,19 @@ public class IncidentsConverted {
 	}
     public String[] getArrayIncidentsDate(){
     	List<Incidents> objIncidents = new ArrayList<Incidents>();
+    	stringConvertor=new ConvertToStringArray();
     	db=new DatabaseOpenHelper(ctxt);
     	objIncidents= db.getAllIncidents();
     	db.closeDB();
-		return stringConvertor.getStringArrayIncidentsDate(objIncidents);
+		return null;//stringConvertor.getStringArrayIncidentsDate(objIncidents);
     	
     }
     public int[] getArrayIncidentsTotal(){
     	List<Incidents> objIncidents = new ArrayList<Incidents>();
+    	stringConvertor=new ConvertToStringArray();
     	db = new DatabaseOpenHelper(ctxt);
     	objIncidents= db.getAllIncidents();
     	db.closeDB();
-		return stringConvertor.getStringArrayIncidentsTotal(objIncidents);
+		return null;// stringConvertor.getStringArrayIncidentsTotal(objIncidents);
     }
 }

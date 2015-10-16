@@ -1,7 +1,11 @@
 package com.pulego.tshwanesafetymc.utils;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.chart.PointStyle;
@@ -13,6 +17,10 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.pulego.tshwanesafetymc.R;
 import com.pulego.tshwanesafetymc.convertors.IncidentsConverted;
+import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
+import com.pulego.tshwanesafetymc.pojos.ConvertToStringArray;
+import com.pulego.tshwanesafetymc.pojos.Incidents;
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -20,6 +28,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +43,9 @@ public class LineFragment extends Fragment {
 			"Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"};
 	//creating an object that will return two arrays, array of integers and arrays of strings
 	private IncidentsConverted objArrays;
-	
+	private DatabaseOpenHelper db;
+	private ConvertToStringArray stringConvertor;
+	 
 	public LineFragment(){
 	}
    @Override
@@ -43,52 +54,43 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	// TODO Auto-generated method stub
 	   View rootView = inflater.inflate(R.layout.line_chat_layout, container, false);
 		 chartLayout = (LinearLayout) rootView.findViewById(R.id.chart);
-		 objArrays=new IncidentsConverted(rootView.getContext());
+		 //objArrays=new IncidentsConverted(rootView.getContext());
+		 db = new DatabaseOpenHelper(rootView.getContext());
 		 openChart(rootView.getContext(),chartLayout);
 	return rootView;
 }
    public void openChart(Context c, LinearLayout l) {
 		// TODO Auto-generated method stub
 
-		    	//int[] x = { 0,1,2,3,4,5,6,7, 8, 9, 10, 11 };
-		    	int[] x = { 0,1,2,3,4,5,6 };
-
-		    	//int[] income = { 2000,2500,2700,3000,2800,3500,3700,3800, 0,0,0,0};
-
-		    	//int[] expense = {2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0, 0, 0 };
-                int[] incidents = objArrays.getArrayIncidentsTotal();
-                String[] mDate= objArrays.getArrayIncidentsDate();
-		    	// Creating an XYSeries for Income
-		    	//XYSeries incomeSeries = new XYSeries("Income");
+                UrlConnectHome incidenrtsObj = new UrlConnectHome(c);
+	             ArrayList<Incidents> incidentsList= (ArrayList<Incidents>) incidenrtsObj.populateTblIncidents();
+                 ConvertToStringArray convert=new ConvertToStringArray();
+	             //Converting Arraylist to array of string
+                // String[] incidentsDate = convert.getStringArrayIncidentsDate(incidentsList);
+		    	//int[] incidentsTotal = convert.getStringArrayIncidentsTotal(incidentsList);
+	             // Creating an XYSeries for Income
 		    	XYSeries incidentsSeries = new XYSeries("Incidents");
-		    	// Creating an XYSeries for Expense
-
-		    	//XYSeries expenseSeries = new XYSeries("Expense");
 
 		    	// Adding data to Income and Expense Series
 
-		    	for(int i=0;i<x.length;i++){
-
-		    	incidentsSeries.add(i, incidents[i]);
-		    	//incomeSeries.add(i,income[i]);
-
-		    	//expenseSeries.add(i,expense[i]);
+		    	for(int i=0;i<incidentsList.size();i++){
+               
+		    	incidentsSeries.add(i, incidentsList.get(i).getTotalNoOfIncidents());
+		    	
 
 		    	}
 
-		    	 
+		    	/* for(int i=0; i < incidentsTotal.length ; i++){
+		    		 incidentsSeries.add(i, incidentsTotal[i]);
+		    	 }*/
 
 		    	// Creating a dataset to hold each series
                 
 		    	XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
 
-		    	// Adding Income Series to the dataset
+		    	// Adding Incidents Series to the dataset
 		    	dataset.addSeries(incidentsSeries);
-		    	//dataset.addSeries(incomeSeries);
-
-		    	// Adding Expense Series to dataset
-
-		    	//dataset.addSeries(expenseSeries);
+		    	
               
 		    	// Creating XYSeriesRenderer to customize incomeSeries
 		    	XYSeriesRenderer incidentsRenderer = new XYSeriesRenderer();
@@ -113,60 +115,19 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	incidentsRenderer.setStroke(BasicStroke.SOLID);
 		    	
-		    	/*XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
-
-		    	incomeRenderer.setColor(Color.CYAN); //color of the graph set to cyan
-
-		    	incomeRenderer.setFillPoints(true);
-
-		    	incomeRenderer.setLineWidth(2f);
-
-		    	incomeRenderer.setDisplayChartValues(true);
-
-		    	//setting chart value distance
-
-		    	incomeRenderer.setDisplayChartValuesDistance(10);
-
-		    	//setting line graph point style to circle
-
-		    	incomeRenderer.setPointStyle(PointStyle.CIRCLE);
-
-		    	//setting stroke of the line chart to solid
-
-		    	incomeRenderer.setStroke(BasicStroke.SOLID);
-
-		    	// Creating XYSeriesRenderer to customize expenseSeries
-
-		    	XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
-
-		    	expenseRenderer.setColor(Color.GREEN);
-
-		    	expenseRenderer.setFillPoints(true);
-
-		    	expenseRenderer.setLineWidth(2f);
-
-		    	expenseRenderer.setDisplayChartValues(true);
-
-		    	//setting line graph point style to circle
-
-		    	expenseRenderer.setPointStyle(PointStyle.SQUARE);
-
-		    	//setting stroke of the line chart to solid
-
-		    	expenseRenderer.setStroke(BasicStroke.SOLID);*/
-
+		    	
 		    	// Creating a XYMultipleSeriesRenderer to customize the whole chart
                
 		    	XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
             
-		    	multiRenderer.setXLabels(0);
+		    	multiRenderer.setXLabels(10);
 		    	
-		    	multiRenderer.setBackgroundColor(Color.BLACK);
+		    	//multiRenderer.setBackgroundColor(Color.BLACK);
 
 		    	multiRenderer.setChartTitle("Weekly Summary of Incidents");
           
 		    //	Date d=new Date();
-		    	multiRenderer.setXTitle("Year 2015");
+		    	multiRenderer.setXTitle("Date of Incidents");
 
 		    	multiRenderer.setYTitle("Number of Incidents");
 
@@ -188,7 +149,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting text size of the graph lable
 
-		    	multiRenderer.setLabelsTextSize(12);
+		    	multiRenderer.setLabelsTextSize(10);
 
 		    	//setting zoom buttons visiblity
 		    	multiRenderer.setZoomButtonsVisible(false);
@@ -251,13 +212,13 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting no of values to display in y axis
 
-		    	multiRenderer.setYLabels(10);
+		    	multiRenderer.setYLabels(7);
 
 		    	// setting y axis max value, Since i'm using static values inside the graph so i'm setting y max value to 4000.
 
 		    	// if you use dynamic values then get the max y value and set here
 
-		    	multiRenderer.setYAxisMax(60);
+		    	multiRenderer.setYAxisMax(50);
 
 		    	//setting used to move the graph on xaxiz to .5 to the right
 
@@ -270,13 +231,17 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		    	//setting bar size or space between two bars
 
 		    	//multiRenderer.setBarSpacing(0.5);
-
+		    	multiRenderer.setAxesColor(Color.BLACK);
+		    	multiRenderer.setXLabelsColor(Color.RED);
+		    	multiRenderer.setMarginsColor(Color.WHITE);
+		    	multiRenderer.setLabelsColor(Color.GREEN);
+		 
 		    	//Setting background color of the graph to transparent
 
-		    	multiRenderer.setBackgroundColor(Color.TRANSPARENT);
+		    	multiRenderer.setBackgroundColor(Color.BLACK);
 
 		    	//Setting margin color of the graph to transparent
-		    	multiRenderer.setMarginsColor(getResources().getColor(R.color.transparent_background));
+		    	//multiRenderer.setMarginsColor(getResources().getColor(R.color.transparent_background));
 
 		    	multiRenderer.setApplyBackgroundColor(true);
 
@@ -287,12 +252,17 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	//setting the margin size for the graph in the order top, left, bottom, right
 		    	multiRenderer.setMargins(new int[]{30, 30, 30, 30});
+		    	
 
-		    	for(int i=0; i< x.length;i++){
+		    	for(int i=0; i< incidentsList.size();i++){
 
-		    	multiRenderer.addXTextLabel(i, mDate[i]);
-
+		    	multiRenderer.addXTextLabel(i,incidentsList.get(i).getDateOfIncidents());
+                   Log.d("Date of Inc", ""+incidentsList.get(i).getDateOfIncidents());
 		    	}
+		    	
+		    /*	for(int i=0; i < incidentsDate.length; i++){
+		    		multiRenderer.addXTextLabel(i,incidentsDate[i]);
+		    	}*/
 
 		    	// Adding incomeRenderer and expenseRenderer to multipleRenderer
 
@@ -300,6 +270,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 		    	// should be same
 		    	multiRenderer.addSeriesRenderer(incidentsRenderer);
+		    	multiRenderer.setXLabelsAngle(300);
 		    	//multiRenderer.addSeriesRenderer(incomeRenderer);
 
 		    	//multiRenderer.addSeriesRenderer(expenseRenderer);
@@ -317,5 +288,12 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		    	chartContainer.addView(mChart);
 	}
 
-   
+   private String getYear() {
+       /*SimpleDateFormat dateFormat = new SimpleDateFormat(
+               "yyyy-MM-dd HH:mm:ss", Locale.getDefault());*/
+	   SimpleDateFormat dateFormat = new SimpleDateFormat(
+               "yyyy", Locale.getDefault());
+       Date date = new Date();
+       return dateFormat.format(date);
+   }
 }

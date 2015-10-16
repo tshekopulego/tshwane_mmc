@@ -107,6 +107,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         // create new tables
         onCreate(db);
 	}
+	public void deleteAll() {
+      deleteAllI();
+      deleteAllS();
+      deleteAllT();
+    }
+	public void deleteAllS() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NO_OF_STATUS, null, null);
+    }
+	public void deleteAllT() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NO_OF_TYPES, null, null);
+    }
+	public void deleteAllI() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NO_OF_INCIDENTS, null, null);
+        
+    }
 	 /**
      * Creating incidents
      */
@@ -120,7 +138,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
  
         // insert row
         long incidents_id = db.insert(TABLE_NO_OF_INCIDENTS, null, values);
- 
+        db.close();
         return incidents_id;
     }
 	/*
@@ -141,11 +159,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	                Incidents i = new Incidents();
 	                i.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 	                i.setDateOfIncidents(c.getString(c.getColumnIndex(KEY_INCIDENT_DATE)));
-	                i.setTotalNoOfIncidents(c.getInt((c.getColumnIndex(KEY_INCIDENT_TOTAL))));
-	                // adding to tags list
+	                i.setTotalNoOfIncidents(c.getInt(c.getColumnIndex(KEY_INCIDENT_TOTAL)));
+	                Log.d("db process", c.getString(c.getColumnIndex(KEY_INCIDENT_DATE))+" and "+c.getInt(c.getColumnIndex(KEY_INCIDENT_TOTAL)));
+	                // adding to incidents list
 	                incidents.add(i);
 	            } while (c.moveToNext());
+	            db.close();
 	        }
+	       
 	        return incidents;
 	    }
 	 /**
@@ -186,6 +207,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	                // adding to tags list
 	                type.add(t);
 	            } while (c.moveToNext());
+	            db.close();
 	        }
 	        return type;
 	    }
