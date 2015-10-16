@@ -2,8 +2,11 @@ package com.pulego.tshwanesafetymc;
 
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
@@ -13,6 +16,12 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
     EditText txtEmail,txtPassword;
     String email,password;
+    
+    private ProgressDialog pDialog; 
+    private Dialog dialog;
+    
+    UrlConnectHome urlconnect;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +37,52 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				email=txtEmail.getText().toString();
 				password=txtPassword.getText().toString();
-				UrlConnectHome urlconnect=new UrlConnectHome(getApplicationContext());
-				urlconnect.initialization();
-				final Intent home=new Intent(getApplicationContext(), HomeActivity.class);
-				home.putExtra("USER_EMAIL", email);
-				
-				startActivity(home);
+				urlconnect=new UrlConnectHome(getApplicationContext());
+				 //**************************************************************************
+					 new	CheckLoginDetails().execute();
+				 //*****************************************************************************
+		
 			}
 		});
     }
 
-
+    class CheckLoginDetails extends AsyncTask<String, String, String> {
+   	 
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Signing in please wait..");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+ 
+        /**
+         * Creating product
+         * */
+        protected String doInBackground(String... args) {
+        	urlconnect.initialization();
+    		final Intent home=new Intent(getApplicationContext(), HomeActivity.class);
+			home.putExtra("USER_EMAIL", email);
+			
+			startActivity(home);
+           return null;
+        }
+ 
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once done
+            pDialog.dismiss();
+        }
+ 
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -68,24 +68,24 @@ public class HomeActivity extends Activity implements InterfaceUtils{
 				dataList.add(new DrawerItem(true)); // adding a spinner to the list
 
 				dataList.add(new DrawerItem("Main Options")); // adding a header to the list
-				dataList.add(new DrawerItem("Incidents", R.drawable.not_));
-				dataList.add(new DrawerItem("Strength Report", R.drawable.ic_report));
-				dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
-				dataList.add(new DrawerItem("Calendar", R.drawable.ic_action_gamepad));
-				
+				dataList.add(new DrawerItem("Incidents Stats", R.drawable.not_));
+				dataList.add(new DrawerItem("Strength Reports", R.drawable.ic_report));
+				dataList.add(new DrawerItem("Notifications", R.drawable.ic_action_gamepad));
+				dataList.add(new DrawerItem("Inbox", R.drawable.ic_action_email));
+				dataList.add(new DrawerItem("My Profile", R.drawable.user1));
 
-				 dataList.add(new DrawerItem("My Favorites"));// adding a header to the list
+				/* dataList.add(new DrawerItem("My Favorites"));// adding a header to the list
 				dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
 				dataList.add(new DrawerItem("My Profile", R.drawable.user1));
 				dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
 				//dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
 				dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
 				dataList.add(new DrawerItem("Import & Export",
-						R.drawable.ic_action_import_export));
+						R.drawable.ic_action_import_export));*/
 
 				 dataList.add(new DrawerItem("Other Option")); // adding a header to the list
 				dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
-				dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
+				//dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
 				dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
 
 				adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,

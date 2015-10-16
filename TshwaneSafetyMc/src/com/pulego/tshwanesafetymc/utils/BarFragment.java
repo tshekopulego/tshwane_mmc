@@ -176,6 +176,8 @@ public class BarFragment extends Fragment {
 	        multiRenderer.setApplyBackgroundColor(true);
 	        multiRenderer.setXLabelsAngle(300);
 	        multiRenderer.setBarWidth(10);
+	        multiRenderer.setXLabelsColor(Color.RED);
+	        multiRenderer.setLabelsColor(Color.GREEN);
 	        // setting the margin size for the graph in the order top, left, bottom,
 	        // right
 	        multiRenderer.setMargins(new int[] { 30, 30, 30, 30 });
