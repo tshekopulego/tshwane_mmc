@@ -4,14 +4,18 @@ import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
     EditText txtEmail,txtPassword;
@@ -26,8 +30,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
+        actionBar.setIcon(R.drawable.icon);
         txtEmail=(EditText)findViewById(R.id.email);
         txtPassword=(EditText)findViewById(R.id.password);
+        TextView linkPasswordRecovery=(TextView)findViewById(R.id.btnPasswordrecovery);
         Button btnLogin=(Button)findViewById(R.id.email_sign_in_button);
         
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +51,15 @@ public class MainActivity extends Activity {
 					 new	CheckLoginDetails().execute();
 				 //*****************************************************************************
 		
+			}
+		});
+        linkPasswordRecovery.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent recovery=new Intent(getApplicationContext(), PasswordResetActivity.class);
+				startActivity(recovery);
 			}
 		});
     }
