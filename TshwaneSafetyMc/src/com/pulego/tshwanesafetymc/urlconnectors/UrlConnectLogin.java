@@ -49,11 +49,7 @@ public String verifyUserLoginDetails(){
 			          //
 			          try {
 			     response = CustomHttpClient.executeHttpPost("http://196.33.249.226/android/tshwanesafety/managementconsole/login.php",postParameters);
-				 //,"http://192.168.43.88/tshwaneManagementConsole/login.php"
-			      // "http://192.168.43.156/jsonscript.php",
-			    		 // your ip address if using localhost server
-			     //  "http://omega.uta.edu/~kmr2464/jsonscript.php",  // in case of a remote server
-			       
+					       
 			     // store the result returned by PHP script that runs MySQL query
 			     String result = response.toString();  
 			              

@@ -77,7 +77,7 @@ public class UrlConnectHome {
    	      
            if (success == 1) {
         	// initialize db
-        	      db=new DatabaseOpenHelper(context);
+        	    //  db=new DatabaseOpenHelper(context);
         	//   db.deleteAll();
                // Getting Array of Products
                reports = json.getJSONArray(TAG_REPORT);
@@ -92,8 +92,8 @@ public class UrlConnectHome {
                    Log.d("Data",date);
                   objIncidents=new Incidents(date, total);
                   objICDTARRAY.add(objIncidents);
-                  db.createIncident(objIncidents);
-                  db.closeDB();
+                 // db.createIncident(objIncidents);
+                 // db.closeDB();
                }
                
            } else {

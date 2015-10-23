@@ -1,13 +1,18 @@
 package com.pulego.tshwanesafetymc;
 
+import com.pulego.tshwanesafetymc.httpconfig.ConnectionDetector;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,9 +23,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-    EditText txtEmail,txtPassword;
-    String email,password;
-    
+    private EditText txtEmail,txtPassword;
+    private String email,password;
+    private boolean isInternetAvailable=false;;
+    private ConnectionDetector c;
     private ProgressDialog pDialog; 
     private Dialog dialog;
     
@@ -34,10 +40,17 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
         actionBar.setIcon(R.drawable.icon);
+        
         txtEmail=(EditText)findViewById(R.id.email);
+        
         txtPassword=(EditText)findViewById(R.id.password);
+        
         TextView linkPasswordRecovery=(TextView)findViewById(R.id.btnPasswordrecovery);
+       
         Button btnLogin=(Button)findViewById(R.id.email_sign_in_button);
+        
+        c=new ConnectionDetector(MainActivity.this);
+        isInternetAvailable=c.isConnectingToInternet();
         
         btnLogin.setOnClickListener(new View.OnClickListener() {
 			
@@ -46,11 +59,17 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				email=txtEmail.getText().toString();
 				password=txtPassword.getText().toString();
-				urlconnect=new UrlConnectHome(getApplicationContext());
-				 //**************************************************************************
-					 new	CheckLoginDetails().execute();
-				 //*****************************************************************************
-		
+				
+				if(isInternetAvailable){
+					
+					urlconnect=new UrlConnectHome(getApplicationContext());
+					 //**************************************************************************
+						 new	CheckLoginDetails().execute();
+					 //*****************************************************************************
+				}else{
+					showAlertDialog(MainActivity.this, "No Internet Connection",
+                            "You don't have internet connection.", false);
+				}
 			}
 		});
         linkPasswordRecovery.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +119,31 @@ public class MainActivity extends Activity {
         }
  
     }
-    
+    public void showAlertDialog(Context context, String title, String message, Boolean status) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+ 
+        // Setting Dialog Title
+        alertDialog.setTitle(title);
+ 
+        // Setting Dialog Message
+        alertDialog.setMessage(message);
+         
+        // Setting alert dialog icon
+        alertDialog.setIcon((status) ? R.drawable.success : R.drawable.fail);
+ 
+        // Setting OK Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            	Intent intent = new Intent(Intent.ACTION_MAIN);
+            	intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+            	startActivity(intent);
+            }
+        });
+ 
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

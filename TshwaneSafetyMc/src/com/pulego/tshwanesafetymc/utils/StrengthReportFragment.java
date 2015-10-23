@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.pulego.tshwanesafetymc.R;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,20 +28,39 @@ public class StrengthReportFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		
 		rootView=inflater.inflate(R.layout.fragment_strength_layout, container, false);
+
+		ActionBar actionBar = getActivity().getActionBar();
+		 
+        // Screen handling while hiding ActionBar icon.
+       actionBar.setDisplayShowHomeEnabled(true);
+ 
+        // Screen handling while hiding Actionbar title.
+        actionBar.setDisplayShowTitleEnabled(true);
+ 
+        // Creating ActionBar tabs.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+ 
 		listStrengthReport=(ListView)rootView.findViewById(R.id.listStrengthReport);
+		
+		populateStrengthReportListView(rootView.getContext());
+		
 		return rootView;
 	}
 	public void populateStrengthReportListView(Context c){
 		ListView list = (ListView) listStrengthReport;
 		 
 		ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
+		
 		HashMap<String, String> map = new HashMap<String, String>();
+		
 		map.put("train", "101");
 		map.put("from", "6:30 AM");
 		map.put("to", "7:40 AM");
 		map.put("car", "GTI 6 GOLD");
 		mylist.add(map);
+		
 		map = new HashMap<String, String>();
 		map.put("train", "103(x)");
 		map.put("from", "6:35 AM");

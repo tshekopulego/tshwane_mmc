@@ -169,7 +169,7 @@ public final class R {
     }
     public static final class id {
         public static final int FrameLayout1=0x7f0a0020;
-        public static final int action_settings=0x7f0a0032;
+        public static final int action_settings=0x7f0a003b;
         public static final int barchart=0x7f0a0014;
         public static final int btnChangePassword=0x7f0a0013;
         public static final int btnPasswordrecovery=0x7f0a000d;
@@ -186,39 +186,48 @@ public final class R {
         public static final int email=0x7f0a0009;
         public static final int email_login_form=0x7f0a0008;
         public static final int email_sign_in_button=0x7f0a000b;
-        public static final int frag1_icon=0x7f0a0021;
-        public static final int frag1_text=0x7f0a0022;
-        public static final int frag2_icon=0x7f0a0025;
-        public static final int frag2_text=0x7f0a0026;
-        public static final int frag3_icon=0x7f0a0023;
-        public static final int frag3_text=0x7f0a0024;
+        public static final int frag1_icon=0x7f0a0022;
+        public static final int frag1_text=0x7f0a0023;
+        public static final int frag2_icon=0x7f0a0026;
+        public static final int frag2_text=0x7f0a0027;
+        public static final int frag3_icon=0x7f0a0024;
+        public static final int frag3_text=0x7f0a0025;
         public static final int headerLayout=0x7f0a0017;
-        public static final int imageView1=0x7f0a002b;
-        public static final int imageView2=0x7f0a002c;
-        public static final int imageView3=0x7f0a002a;
+        public static final int imageView1=0x7f0a002a;
+        public static final int imageView2=0x7f0a0035;
+        public static final int imageView3=0x7f0a0034;
         public static final int itemLayout=0x7f0a0019;
         public static final int left_drawer=0x7f0a0002;
         public static final int left_pic=0x7f0a001c;
         public static final int linearLayout1=0x7f0a000e;
-        public static final int listStrengthReport=0x7f0a0027;
+        public static final int listStrengthReport=0x7f0a0031;
+        public static final int listView1=0x7f0a0028;
         public static final int ll1=0x7f0a0004;
         public static final int ll2=0x7f0a0006;
         public static final int ll3=0x7f0a000c;
         public static final int login_form=0x7f0a0003;
         public static final int login_progress=0x7f0a0007;
+        public static final int messaging=0x7f0a0021;
         public static final int password=0x7f0a000a;
-        public static final int piechart=0x7f0a0031;
+        public static final int piechart=0x7f0a003a;
         public static final int spinnerLayout=0x7f0a0015;
         public static final int sub_text_email=0x7f0a001e;
-        public static final int tableRow2=0x7f0a0029;
+        public static final int tableRow1=0x7f0a0033;
+        public static final int tableRow2=0x7f0a0036;
         public static final int textView1=0x7f0a000f;
         public static final int textView2=0x7f0a0005;
-        public static final int textView4=0x7f0a0030;
+        public static final int textView3=0x7f0a0029;
+        public static final int textView4=0x7f0a002d;
+        public static final int textView5=0x7f0a002f;
         public static final int text_main_name=0x7f0a001d;
-        public static final int txtNoCar=0x7f0a002f;
-        public static final int txtNoMotorCycle=0x7f0a002d;
-        public static final int txtNoPerson=0x7f0a002e;
-        public static final int txtshiftdate=0x7f0a0028;
+        public static final int txtEmail=0x7f0a002e;
+        public static final int txtName=0x7f0a002b;
+        public static final int txtNoCar=0x7f0a0038;
+        public static final int txtNoMotorCycle=0x7f0a0039;
+        public static final int txtNoPerson=0x7f0a0037;
+        public static final int txtPosition=0x7f0a002c;
+        public static final int txtUser_name=0x7f0a0030;
+        public static final int txtshiftdate=0x7f0a0032;
     }
     public static final class integer {
         public static final int erd_launch_times=0x7f060000;
@@ -235,13 +244,16 @@ public final class R {
         public static final int frag_chart_incident=0x7f030007;
         public static final int frag_incident=0x7f030008;
         public static final int frag_view_incidents=0x7f030009;
-        public static final int fragment_layout_one=0x7f03000a;
-        public static final int fragment_layout_three=0x7f03000b;
-        public static final int fragment_layout_two=0x7f03000c;
-        public static final int fragment_strength_layout=0x7f03000d;
-        public static final int line_chat_layout=0x7f03000e;
-        public static final int listview_layout_design=0x7f03000f;
-        public static final int pie_chat_layout=0x7f030010;
+        public static final int fragment_inbox_layout=0x7f03000a;
+        public static final int fragment_layout_one=0x7f03000b;
+        public static final int fragment_layout_three=0x7f03000c;
+        public static final int fragment_layout_two=0x7f03000d;
+        public static final int fragment_notifications_layout=0x7f03000e;
+        public static final int fragment_profile_layout=0x7f03000f;
+        public static final int fragment_strength_layout=0x7f030010;
+        public static final int line_chat_layout=0x7f030011;
+        public static final int listview_layout_design=0x7f030012;
+        public static final int pie_chat_layout=0x7f030013;
     }
     public static final class menu {
         public static final int home=0x7f090000;
@@ -249,29 +261,38 @@ public final class R {
         public static final int password_reset=0x7f090002;
     }
     public static final class string {
-        public static final int action_settings=0x7f070001;
-        public static final int action_sign_in=0x7f070009;
-        public static final int app_name=0x7f070000;
-        public static final int btn_change_password=0x7f070011;
-        public static final int drawer_close=0x7f070005;
-        public static final int drawer_open=0x7f070004;
-        public static final int field_required=0x7f07000d;
-        public static final int hello_world=0x7f070002;
-        public static final int incorrect_password=0x7f07000c;
-        public static final int info_title=0x7f070012;
-        public static final int invalid_password=0x7f07000b;
-        public static final int invalid_username=0x7f07000a;
+        public static final int action_settings=0x7f07000a;
+        public static final int action_sign_in=0x7f070012;
+        public static final int app_name=0x7f070009;
+        public static final int btn_change_password=0x7f07001a;
+        public static final int drawer_close=0x7f07000e;
+        public static final int drawer_open=0x7f07000d;
+        public static final int field_required=0x7f070016;
+        public static final int hello_world=0x7f07000b;
+        public static final int incorrect_password=0x7f070015;
+        public static final int info_title=0x7f07001b;
+        public static final int invalid_password=0x7f070014;
+        public static final int invalid_username=0x7f070013;
+        public static final int list_view_notifications=0x7f070001;
+        public static final int list_view_strength_report=0x7f070008;
+        public static final int profile_details=0x7f070002;
         /**  Strings related to login 
          */
-        public static final int prompt_employee_no=0x7f07000e;
-        public static final int prompt_new_password=0x7f07000f;
-        public static final int prompt_password=0x7f070008;
-        public static final int prompt_re_enter_password=0x7f070010;
+        public static final int prompt_employee_no=0x7f070017;
+        public static final int prompt_new_password=0x7f070018;
+        public static final int prompt_password=0x7f070011;
+        public static final int prompt_re_enter_password=0x7f070019;
         /**  Strings related to login 
          */
-        public static final int prompt_username=0x7f070007;
-        public static final int title_activity_home=0x7f070003;
-        public static final int title_activity_password_reset=0x7f070006;
+        public static final int prompt_username=0x7f070010;
+        public static final int title_activity_home=0x7f07000c;
+        public static final int title_activity_password_reset=0x7f07000f;
+        public static final int user_clarity=0x7f070000;
+        public static final int user_email=0x7f070006;
+        public static final int user_fullname=0x7f070003;
+        public static final int user_position=0x7f070005;
+        public static final int user_region=0x7f070004;
+        public static final int user_strength_details=0x7f070007;
     }
     public static final class style {
         /** 

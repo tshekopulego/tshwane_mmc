@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_details">Personal profile</string>
+    <string name="user_fullname">Name:</string>
+    <string name="user_region">Region name:</string>
+    <string name="user_position">Position:</string>
+    <string name="user_email">E-mail:</string>
+</resources>

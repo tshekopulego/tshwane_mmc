@@ -11,17 +11,25 @@ import org.achartengine.renderer.BasicStroke;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import com.pulego.tshwanesafetymc.utils.AboutFragment;
+import com.pulego.tshwanesafetymc.utils.HelpFragment;
+import com.pulego.tshwanesafetymc.utils.InboxFragment;
 import com.pulego.tshwanesafetymc.utils.InterfaceUtils;
+import com.pulego.tshwanesafetymc.utils.NotificationFragment;
+import com.pulego.tshwanesafetymc.utils.ProfileFragment;
 import com.pulego.tshwanesafetymc.utils.StrengthReportFragment;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.Notification;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Typeface;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -36,9 +44,7 @@ import android.widget.ListView;
 public class HomeActivity extends Activity{
 
 	private View mChart;
-	private String[] mMonth = new String[] {
-			"Jan", "Feb" , "Mar", "Apr", "May", "Jun",
-			"Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"};
+	private int index;
 	
 	
 	private DrawerLayout mDrawerLayout;
@@ -56,6 +62,15 @@ public class HomeActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		
+		//Calling an action bar Class
+		ActionBar actionBar=getActionBar();
+		
+		//Changing the action bar's background color
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
+		
+		//Sertting the action bar icon
+        actionBar.setIcon(R.drawable.icon);
+        
 		// Initializing
 				dataList = new ArrayList<DrawerItem>();
 				mTitle = mDrawerTitle = getTitle();
@@ -75,15 +90,6 @@ public class HomeActivity extends Activity{
 				dataList.add(new DrawerItem("Inbox", R.drawable.ic_list_inbox));
 				dataList.add(new DrawerItem("My Profile", R.drawable.ic_list_profile));
 
-				/* dataList.add(new DrawerItem("My Favorites"));// adding a header to the list
-				dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
-				dataList.add(new DrawerItem("My Profile", R.drawable.user1));
-				dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
-				//dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
-				dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
-				dataList.add(new DrawerItem("Import & Export",
-						R.drawable.ic_action_import_export));*/
-
 				 dataList.add(new DrawerItem("Other Option")); // adding a header to the list
 				dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
 				//dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
@@ -95,7 +101,7 @@ public class HomeActivity extends Activity{
 				mDrawerList.setAdapter(adapter);
 
 				mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+				
 				getActionBar().setDisplayHomeAsUpEnabled(true);
 				getActionBar().setHomeButtonEnabled(true);
 
@@ -103,15 +109,20 @@ public class HomeActivity extends Activity{
 						R.drawable.ic_drawer, R.string.drawer_open,
 						R.string.drawer_close) {
 					public void onDrawerClosed(View view) {
+						if(index == 2){
+						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+						}
 						getActionBar().setTitle(mTitle);
 						invalidateOptionsMenu(); // creates call to
 													// onPrepareOptionsMenu()
 					}
 
 					public void onDrawerOpened(View drawerView) {
+						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 						getActionBar().setTitle(mDrawerTitle);
 						invalidateOptionsMenu(); // creates call to
-													// onPrepareOptionsMenu()
+					    						// onPrepareOptionsMenu()
+
 					}
 				};
 
@@ -146,136 +157,40 @@ public class HomeActivity extends Activity{
 
 		case 2:
 			fragment = new FragmentThree();
-			
-			//fragment.setArguments(args);
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
 		case 3:
-			
 			fragment = new StrengthReportFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
-			/*fragment = new FragmentOne();
-			args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-			.commit();*/
 			break;
 		case 4:
-			fragment = new FragmentTwo();
-			args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
+			fragment = new NotificationFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
 		case 5:
-			fragment = new FragmentThree();
-			
-			//fragment.setArguments(args);
+			fragment = new InboxFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 7:
-			fragment = new FragmentTwo();
-			args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
+		case 6:
+			fragment = new ProfileFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
 		case 8:
-			fragment = new FragmentThree();
-			
-			//fragment.setArguments(args);
+			fragment = new AboutFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
 		case 9:
-			fragment = new FragmentOne();
-			args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
+			fragment = new HelpFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 10:
-			fragment = new FragmentTwo();
-			args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-			.commit();
-			break;
-		case 11:
-			fragment = new FragmentThree();
-			
-			//fragment.setArguments(args);
-			//FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-					.commit();
-			break;
-		case 12:
-			fragment = new FragmentOne();
-			args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
-			//FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-					.commit();
-			break;
-		case 14:
-			fragment = new FragmentThree();
-			
-			//fragment.setArguments(args);
-			//FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-					.commit();
-			break;	
-		case 15:
-			fragment = new FragmentOne();
-			args.putString(FragmentOne.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentOne.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
-			//FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-					.commit();
-			break;
-		case 16:
-			fragment = new FragmentTwo();
-			args.putString(FragmentTwo.ITEM_NAME, dataList.get(possition)
-					.getItemName());
-			args.putInt(FragmentTwo.IMAGE_RESOURCE_ID, dataList.get(possition)
-					.getImgResID());
-			
-			fragment.setArguments(args);
-			//FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-					.commit();
-			break;
+		
 		default:
 			break;
 		}
@@ -326,8 +241,11 @@ public class HomeActivity extends Activity{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
 			if (dataList.get(position).getTitle() == null) {
+				index=position;
 				SelectItem(position);
+				
 			}
 
 		}
