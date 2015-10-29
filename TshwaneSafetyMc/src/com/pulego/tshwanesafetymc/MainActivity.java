@@ -2,6 +2,7 @@ package com.pulego.tshwanesafetymc;
 
 import com.pulego.tshwanesafetymc.httpconfig.ConnectionDetector;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectStrengthReport;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     private EditText txtEmail,txtPassword;
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
     private Dialog dialog;
     
     UrlConnectHome urlconnect;
+    UrlConnectStrengthReport urlcreatereport;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class MainActivity extends Activity {
        
         Button btnLogin=(Button)findViewById(R.id.email_sign_in_button);
         
-        c=new ConnectionDetector(MainActivity.this);
+        c=new ConnectionDetector(getApplicationContext());
         isInternetAvailable=c.isConnectingToInternet();
         
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +65,8 @@ public class MainActivity extends Activity {
 				
 				if(isInternetAvailable){
 					
-					urlconnect=new UrlConnectHome(getApplicationContext());
+					urlconnect = new UrlConnectHome(getApplicationContext());
+				   // urlcreatereport = new UrlConnectStrengthReport(getApplicationContext());
 					 //**************************************************************************
 						 new	CheckLoginDetails().execute();
 					 //*****************************************************************************
@@ -102,11 +106,21 @@ public class MainActivity extends Activity {
          * Creating product
          * */
         protected String doInBackground(String... args) {
-        	urlconnect.initialization();
-    		final Intent home=new Intent(getApplicationContext(), HomeActivity.class);
-			home.putExtra("USER_EMAIL", email);
-			
-			startActivity(home);
+        	//Initializing the home page
+        	try{
+	        	urlconnect.initialization();
+	        	
+	        	//urlcreatereport.populateStrengthReportResult();
+	        	
+	        	//urlcreatereport.populateDiploymentTB();
+	        	
+	    		final Intent home=new Intent(getApplicationContext(), HomeActivity.class);
+				home.putExtra("USER_EMAIL", email);
+				
+				startActivity(home);
+        	}catch(Exception err){
+        		Toast.makeText(getApplicationContext(), err.getMessage(), Toast.LENGTH_LONG).show();
+        	}
            return null;
         }
  
