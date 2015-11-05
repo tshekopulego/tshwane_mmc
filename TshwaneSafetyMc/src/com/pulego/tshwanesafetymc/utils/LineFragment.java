@@ -4,7 +4,6 @@ package com.pulego.tshwanesafetymc.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import org.achartengine.ChartFactory;
@@ -16,7 +15,6 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.pulego.tshwanesafetymc.R;
-import com.pulego.tshwanesafetymc.convertors.IncidentsConverted;
 import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
 import com.pulego.tshwanesafetymc.pojos.ConvertToStringArray;
 import com.pulego.tshwanesafetymc.pojos.Incidents;
@@ -38,13 +36,9 @@ public class LineFragment extends Fragment {
 	LinearLayout chartLayout;
 	   
 	private View mChart;
-	private String[] mMonth = new String[] {
-			"Jan", "Feb" , "Mar", "Apr", "May", "Jun",
-			"Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"};
-	//creating an object that will return two arrays, array of integers and arrays of strings
-	private IncidentsConverted objArrays;
+
 	private DatabaseOpenHelper db;
-	private ConvertToStringArray stringConvertor;
+	
 	 
 	public LineFragment(){
 	}

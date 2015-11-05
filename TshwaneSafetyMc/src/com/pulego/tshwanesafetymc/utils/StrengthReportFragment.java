@@ -69,9 +69,17 @@ public class StrengthReportFragment extends Fragment {
 		
 		db = new DatabaseOpenHelper(rootView.getContext());
 		
+		//load data on the list view
+		populateStrengthReportListView(rootView.getContext());
+		
 		//++++++++++++++++++++++++++++++++++++++++++++++
-		  new LoadStrengthReport().execute();
-		//+++++++++++++++++++++++++++++++++++++++++++++
+				try{
+				  new LoadStrengthReport().execute();
+				}catch(Exception e){
+					Toast.makeText(getActivity(), "Error occured :"+e.getMessage(), Toast.LENGTH_SHORT);
+					Log.d("Error Occured", e.getMessage());
+				}
+				//+++++++++++++++++++++++++++++++++++++++++++++
 		
 		
 		return rootView;
@@ -82,21 +90,7 @@ public class StrengthReportFragment extends Fragment {
 		ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		
-		/*map.put("train", "101");
-		map.put("from", "6:30 AM");
-		map.put("to", "7:40 AM");
-		map.put("car", "GTI 6 GOLD");
-		mylist.add(map);
-		
-		map = new HashMap<String, String>();
-		map.put("train", "103(x)");
-		map.put("from", "6:35 AM");
-		map.put("to", "7:45 AM");
-		map.put("car", "GTI 7 GOLD");
-		mylist.add(map);*/
-		
-		
+	
 		//List<StrengthReport> strengthReportList= db.getAllStrengthReportRecords();
 		
 		List<DiploymentCalc> diploymentCalcList = db.getDiploymentCalcRecords();
@@ -189,15 +183,15 @@ public class StrengthReportFragment extends Fragment {
         protected String doInBackground(String... args) {
         	try {
         		//load data on the list view
-        		populateStrengthReportListView(rootView.getContext());
+        		//populateStrengthReportListView(rootView.getContext());
         		//populate strength report on the db
-        		urlcreatereport.populateStrengthReportResult();
+        		//urlcreatereport.populateStrengthReportResult();
         		//populate deployment on the db
-				urlcreatereport.populateDiploymentTB();
+				//urlcreatereport.populateDiploymentTB();
 				
 			} catch (Exception e) {
 				// TODO: handle exception
-				Toast.makeText(rootView.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+			//	Toast.makeText(rootView.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 				Log.d("Strength Report Frag Error :", e.getMessage());
 			}
            return null;

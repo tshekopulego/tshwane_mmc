@@ -11,6 +11,8 @@ import org.achartengine.renderer.BasicStroke;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectNotifications;
+import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectStrengthReport;
 import com.pulego.tshwanesafetymc.utils.AboutFragment;
 import com.pulego.tshwanesafetymc.utils.HelpFragment;
 import com.pulego.tshwanesafetymc.utils.InboxFragment;
@@ -71,6 +73,7 @@ public class HomeActivity extends Activity{
 		//Sertting the action bar icon
         actionBar.setIcon(R.drawable.icon);
         
+             
 		// Initializing
 				dataList = new ArrayList<DrawerItem>();
 				mTitle = mDrawerTitle = getTitle();
@@ -162,11 +165,17 @@ public class HomeActivity extends Activity{
 			break;
 		case 3:
 			fragment = new StrengthReportFragment();
+			UrlConnectStrengthReport urlcreatereport = new UrlConnectStrengthReport(getApplicationContext());
+			//populate deployment on the db
+			urlcreatereport.populateDiploymentTB();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
+			
 			break;
 		case 4:
 			fragment = new NotificationFragment();
+			UrlConnectNotifications urlfillNotification = new UrlConnectNotifications(getApplicationContext());
+			urlfillNotification.fillNotifications();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;

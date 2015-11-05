@@ -10,6 +10,7 @@ import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectStrengthReport;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -17,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailStrengthReportFragment extends Fragment {
-    private UrlConnectStrengthReport urlConnectReport;
-     
+    UrlConnectStrengthReport urlConnectReport;
+   // UrlConnectStrengthReport urlcreatereport;
     private View rootView;
     
     private TableLayout table;
@@ -57,6 +59,7 @@ public class DetailStrengthReportFragment extends Fragment {
 	public DetailStrengthReportFragment() {
 		super();
 	}
+	
      @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
@@ -64,14 +67,16 @@ public class DetailStrengthReportFragment extends Fragment {
     	 rootView=inflater.inflate(R.layout.fragment_strength_details_layout, container, false);
     	
     	 urlConnectReport = new UrlConnectStrengthReport(rootView.getContext());
+    	//populate strength report on the db
+    	 urlConnectReport.populateStrengthReportResult();
     	 
     	 table = (TableLayout) rootView.findViewById(R.id.table);
     	 
-    	 txtTotBikes = (TextView) rootView.findViewById(R.id.txtNoMotorCycle);
+    	 txtTotBikes = (TextView) rootView.findViewById(R.id.txtTotNoBikes);
 
     	 txtTotMembers = (TextView) rootView.findViewById(R.id.txtTotNoMembers);
 
-    	 txtTotVehicle = (TextView) rootView.findViewById(R.id.txtTotCars);
+    	 txtTotVehicle = (TextView) rootView.findViewById(R.id.txtTotNoCars);
     	 
     	 db = new DatabaseOpenHelper(rootView.getContext());
     	 
@@ -87,17 +92,64 @@ public class DetailStrengthReportFragment extends Fragment {
     	 
     	 int vehicles = getArguments().getInt(KEY_VEHICLE);
     	 
+    	 Log.d("Details ",bikes+" "+members+" "+vehicles);
+    	 
     	 txtTotBikes.setText(""+bikes);
     	 
     	 txtTotMembers.setText(""+members);
     	 
     	 txtTotVehicle.setText(""+vehicles);
     	 
+    	
+    	 BuildTable();
+    	 
     	// populateStrengthTable(date,shift);
-    	 new CheckLoginDetails().execute();
+    	// new CheckLoginDetails().execute();
     	 
     	 return rootView;
     }
+     private void BuildTable() {
+
+ 		//sqlcon.open();
+ 		Cursor c = db.readEntry(date, shift);
+
+ 		int rows = c.getCount();
+ 		int cols = c.getColumnCount();
+
+ 		c.moveToFirst();
+
+ 		// outer for loop
+ 		for (int i = 0; i < rows; i++) {
+
+ 			TableRow row = new TableRow(rootView.getContext());
+ 			row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+ 					LayoutParams.WRAP_CONTENT));
+
+ 			// inner for loop
+ 			for (int j = 0; j < cols; j++) {
+
+ 				TextView tv = new TextView(rootView.getContext());
+ 				tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+ 						LayoutParams.WRAP_CONTENT));
+ 				tv.setBackgroundResource(R.drawable.button_layer);
+ 				tv.setGravity(Gravity.CENTER);
+ 				tv.setTextSize(18);
+ 				tv.setPadding(0, 5, 0, 5);
+
+ 				tv.setText(c.getString(j));
+
+ 				row.addView(tv);
+
+ 			}
+
+ 			c.moveToNext();
+
+ 			table.addView(row);
+
+ 		}
+ 		db.closeDB();
+ 	}
+     
      public void populateStrengthTable(String strDate,String strShift){
  		TableLayout t1;
         
@@ -122,9 +174,32 @@ public class DetailStrengthReportFragment extends Fragment {
  		
 		 int[] images = {R.drawable.ic_list_person,R.drawable.ic_list_motorcycle,R.drawable.ic_list_car};
  		
+		 /*
+		 ImageView imageView = new ImageView(rootView.getContext());
+	     imageView.setId(21);
+	     imageView.setImageResource(R.drawable.ic_list_person);
+	     // imageView.setBackgroundColor(Color.GREEN);
+	     imageView.setPadding(5, 5, 5, 5);
+	     tr_head.addView(imageView);// add th
+		 
+	     ImageView imageView2 = new ImageView(rootView.getContext());
+	     imageView.setId(23);
+	     imageView.setImageResource(R.drawable.ic_list_motorcycle);
+	    // imageView.setBackgroundColor(Color.GREEN);
+	     imageView.setPadding(5, 5, 5, 5);
+			 tr_head.addView(imageView);// add th
+			 
+			 ImageView imageView3 = new ImageView(rootView.getContext());
+    	     imageView.setId(25);
+    	     imageView.setImageResource(R.drawable.ic_list_car);
+    	     //imageView.setBackgroundColor(Color.GREEN);
+    	     imageView.setPadding(5, 5, 5, 5);
+				 tr_head.addView(imageView);// add th
+				 
+				 */
  		int index=0;
  		
-        for(int img=0;img > images.length ; img++){
+      /*  for(int img=0;img > images.length ; img++){
  		//TextView label_date = new TextView(this);
         	ImageView imageView = new ImageView(rootView.getContext());
         	     imageView.setId(20+index);
@@ -133,7 +208,7 @@ public class DetailStrengthReportFragment extends Fragment {
         	     imageView.setPadding(5, 5, 5, 5);
  				 tr_head.addView(imageView);// add the column to the table row here
  				 index++;
-        }
+        }*/
  			
  		//After adding the columns to the table row its time to add the table row the the main table layout that we fetched at the start
 
@@ -233,13 +308,16 @@ public class DetailStrengthReportFragment extends Fragment {
           * Creating product
           * */
          protected String doInBackground(String... args) {
-        	 try {
+        	// try {
+        	//populate strength report on the db
+        	// urlConnectReport.populateStrengthReportResult();
+        	 
         		 populateStrengthTable(date, shift);
-			} catch (Exception e) {
+			//} catch (Exception e) {
 				// TODO: handle exception
-				Log.d("Details Error", e.getMessage());
+				//Log.d("Details Error", e.getMessage());
 				
-			}
+			//}
          	  
             return null;
          }

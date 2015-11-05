@@ -50,79 +50,88 @@ public class UrlConnectStrengthReport {
   	  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
   	  .penaltyLog().build());
     	 int count=0;
-         // Building Parameters
-         List<NameValuePair> params = new ArrayList<NameValuePair>();
-         // getting JSON string from URL
-         JSONObject json = jParser.makeHttpRequest(URL_CONNECT_STRENGTH_REPORT, "GET", params);
-
-         // Check your log cat for JSON reponse
-         Log.d("All Incidents: ", json.toString());
-
-         try {
-             // Checking for SUCCESS TAG
-             int success = json.getInt(TAG_SUCCESS);
-          
-     	      
-             if (success == 1) {
-          	// initialize db
-          	      db=new DatabaseOpenHelper(context);
-          	      
-          	    List<StrengthReport> ids = db.getAllStrengthReportIDs();
-      
-                 // Getting Array of Products
-                 reports = json.getJSONArray(TAG_REPORT);
-                
-                 // looping through All Products
-                 for (int i = 0; i < reports.length(); i++) {
-                     JSONObject c = reports.getJSONObject(i);
-
-                     // Storing each json item in variable
-                     int id = c.getInt("id"); 
-                     String date = c.getString("date");
-                     String shift = c.getString("shift");
-                     String reported_by = c.getString("reported_by");
-                     String supervisor = c.getString("supervisor");
-                     String region = c.getString("region");
-                     int members = c.getInt("members");
-                     int vehicles = c.getInt("vehicles");
-                     int bikes = c.getInt("bikes");
-                     String region_ob = c.getString("region_ob");
-                     String nodal_ob = c.getString("nodal_ob");
-                     String remarks = c.getString("remarks");
-                     String nodal_remarks = c.getString("nodal_remarks");
-                     String nodal_ob_capturedby = c.getString("nodal_ob_capturedby");
-                     Log.d("id",""+id);
-                   
-                      strengthReport =new StrengthReport(id, date, shift, reported_by,
-                    		 supervisor, region, members, vehicles, bikes,
-                    		 region_ob, nodal_ob, remarks, nodal_remarks,
-                    		 nodal_ob_capturedby);
-                      
-                    if(ids.isEmpty()){// change to ids.size() == 0
-                    
-                     Log.d("Url Connect Strength", "Data here now ids is empty");
-                     //db=new DatabaseOpenHelper(context);
-                     db.createStrengthReport(strengthReport);
-                    } else{
-                    	 for(int x=0; x < ids.size(); x++){
-                    		 if(id != ids.get(x).getId()){
-                    			// db=new DatabaseOpenHelper(context);
-                                 db.createStrengthReport(strengthReport);
-                    		 }
-                    	 }
-                    	 
-                    }
-                  
-                   // db.closeDB();
-                 }
-                 db.closeDB();
-             } else {
-                 // no products found
-          	   Log.e("log_incidents", "No data found");
-               }
-         } catch (JSONException e) {
-             e.printStackTrace();
-         }
+    	 try {
+	         // Building Parameters
+	         List<NameValuePair> params = new ArrayList<NameValuePair>();
+	         // getting JSON string from URL
+	         JSONObject json = jParser.makeHttpRequest(URL_CONNECT_STRENGTH_REPORT, "GET", params);
+	
+	         // Check your log cat for JSON reponse
+	         Log.d("All Incidents: ", json.toString());
+	
+	         try {
+	             // Checking for SUCCESS TAG
+	             int success = json.getInt(TAG_SUCCESS);
+	          
+	     	      
+	             if (success == 1) {
+	          	// initialize db
+	          	      db=new DatabaseOpenHelper(context);
+	          	      
+	          	   // List<StrengthReport> ids = db.getAllStrengthReportIDs();
+	      
+	                 // Getting Array of Products
+	                 reports = json.getJSONArray(TAG_REPORT);
+	                
+	                 // looping through All Products
+	                 for (int i = 0; i < reports.length(); i++) {
+	                     JSONObject c = reports.getJSONObject(i);
+	
+	                     // Storing each json item in variable
+	                     int id = c.getInt("id"); 
+	                     String date = c.getString("date");
+	                     String shift = c.getString("shift");
+	                     String reported_by = c.getString("reported_by");
+	                     String supervisor = c.getString("supervisor");
+	                     String region = c.getString("region");
+	                     int members = c.getInt("members");
+	                     int vehicles = c.getInt("vehicles");
+	                     int bikes = c.getInt("bikes");
+	                     String region_ob = c.getString("region_ob");
+	                     String nodal_ob = c.getString("nodal_ob");
+	                     String remarks = c.getString("remarks");
+	                     String nodal_remarks = c.getString("nodal_remarks");
+	                     String nodal_ob_capturedby = c.getString("nodal_ob_capturedby");
+	                     Log.d("id",""+id);
+	                   
+	                      strengthReport =new StrengthReport(id, date, shift, reported_by,
+	                    		 supervisor, region, members, vehicles, bikes,
+	                    		 region_ob, nodal_ob, remarks, nodal_remarks,
+	                    		 nodal_ob_capturedby);
+	                      
+	                     long row_Id = db.createStrengthReport(strengthReport);
+	                      if(row_Id==0){
+	                    	  Log.d("Data :", "Exist Already in here");
+	                      }
+	                  /*  if(ids.isEmpty()){// change to ids.size() == 0
+	                    
+	                     Log.d("Url Connect Strength", "Data here now ids is empty");
+	                     //db=new DatabaseOpenHelper(context);
+	                     db.createStrengthReport(strengthReport);
+	                    } else{
+	                    	 for(int x=0; x < ids.size(); x++){
+	                    		 if(id != ids.get(x).getId()){
+	                    			// db=new DatabaseOpenHelper(context);
+	                                 db.createStrengthReport(strengthReport);
+	                    		 }
+	                    	 }
+	                    	 
+	                    }*/
+	                  
+	                   // db.closeDB();
+	                 }
+	                 db.closeDB();
+	             } else {
+	                 // no products found
+	          	   Log.e("log_incidents", "No data found");
+	          	   
+	               }
+	         } catch (JSONException e) {
+	             e.printStackTrace();
+	         }
+    	 } catch (Exception e) {
+ 			// TODO: handle exception
+ 		}
     }
     public void populateDiploymentTB(){
     	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -145,8 +154,7 @@ public class UrlConnectStrengthReport {
                if (success == 1) {
             	// initialize db
             	      db=new DatabaseOpenHelper(context);
-            	      
-            	    List<DiploymentCalc> ids = db.getAllDiploymentReportIDs();
+            	     
         
                    // Getting Array of Products
                    reports = json.getJSONArray(TAG_REPORT);
@@ -168,20 +176,10 @@ public class UrlConnectStrengthReport {
                      
                        diploymentCalc=new DiploymentCalc(id, date, shift, members, vehicles, bikes, progress);
                        
-                       
-                      if(ids.isEmpty()){// change to ids.size() == 0
-                    	   Log.d("Url Connect Strength", "Data here now ids is empty");
-                    	   
-                            db.addDiploymentCalculations(diploymentCalc);
-                      } else{
-                      	 for(int x=0; x < ids.size(); x++){
-                      		 if(id != ids.get(x).getId()){
-                      			// db=new DatabaseOpenHelper(context);
-                      			db.addDiploymentCalculations(diploymentCalc);
-                      		 }
-                      	 }
-                      	 
-                      }
+                       long ids = db.addDiploymentCalculations(diploymentCalc);
+                      if(ids ==0){// change to ids.size() == 0
+                    	   Log.d("Url Data ", "Already exist");               
+                      } 
                     
                      // db.closeDB();
                    }
