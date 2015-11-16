@@ -12,20 +12,24 @@ public class NotificationsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notifications);
 		
-		String output = "Inside the activity of Notification two: ";
-	      TextView dataIntent = (TextView) findViewById(R.id.text2);
+		String output = "";
+	      TextView title = (TextView) findViewById(R.id.txtTitleNews);
+	      TextView message = (TextView) findViewById(R.id.txtMessageNews);
+	      TextView notifyDate = (TextView) findViewById(R.id.txtDateNotifi);
 	    
 	      // take the data and the extras of the intent
 	     // Uri url = getIntent().getData();
 	      Bundle extras = getIntent().getExtras();
-	      output += extras.getString("NotifyTitle")+"\n"+ extras.getString("NotifyMessage")+"\n\t\t"+extras.getString("NotifyDate");
+	      output +=  extras.getString("NotifyMessage");
 	      
 	      // if there are extras, add them to the output string
 	      if(extras != null){
 	    	  output = output + "\n from: " +extras.getString("from");
 			 
 	      }
-	      dataIntent.setText(output);
+	      title.setText(extras.getString("NotifyTitle"));
+	      message.setText(output);
+	      notifyDate.setText(extras.getString("NotifyDate"));
 		
 	}
 

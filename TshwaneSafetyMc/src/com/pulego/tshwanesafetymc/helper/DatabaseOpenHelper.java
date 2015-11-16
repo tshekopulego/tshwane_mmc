@@ -29,7 +29,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
  
     // Database Name
-    private static final String DATABASE_NAME = "tshwaneSafetyManagerConsole.db";
+    private static final String DATABASE_NAME = "tshwaneSafetyManagerConsole.sqlite";
     
     // Table Names
     private static final String TABLE_STRENGTH_REPORT = "tbl_strength_report";
@@ -37,7 +37,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String TABLE_NOTIFICATION = "tbl_notifications";
  
     // Common column names
-    private static final String KEY_ID = "id";
+    private static final String KEY_ID = "_id";
     private static final String KEY_CREATED_AT = "created_at";
     
     //Strength report column
@@ -77,7 +77,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     
  // Todo table create statement
     private static final String CREATE_TABLE_STRENGTH_REPORT = "CREATE TABLE "
-            + TABLE_STRENGTH_REPORT + "(" + ID + " INTEGER PRIMARY KEY," + DATE
+            + TABLE_STRENGTH_REPORT + "(" + KEY_ID + " INTEGER PRIMARY KEY," + DATE
             + " TEXT,"  + SHIFT
             + " TEXT," + REPORTED_BY
             + " TEXT," + SUPERVISOR
@@ -95,7 +95,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
  // Todo table create statement
     private static final String CREATE_TABLE_STRENGTH_QUERY = "CREATE TABLE "
-            + TABLE_STRENGTH_QUERY + "(" + ID + " INTEGER PRIMARY KEY," + DATE
+            + TABLE_STRENGTH_QUERY + "(" + KEY_ID + " INTEGER PRIMARY KEY," + DATE
             + " TEXT,"  + SHIFT
             + " TEXT," + TOT_BIKES 
             + " INTEGER,"+ TOT_MEMBERS
@@ -106,7 +106,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     
     // Notification table create statement
     private static final String CREATE_TABLE_NOFICATION = "CREATE TABLE "
-            + TABLE_NOTIFICATION + "(" + ID + " INTEGER PRIMARY KEY," + NOTIFI_TITLE
+            + TABLE_NOTIFICATION + "(" + KEY_ID + " INTEGER PRIMARY KEY," + NOTIFI_TITLE
             + " TEXT,"  + NOTIFI_MESSAGE
             + " TEXT,"+ NOTIFI_NOTIFICATIONDATE
             + " TEXT,"+ NOTIFI_PUBLISHEDBY
@@ -152,7 +152,7 @@ public long fillNotificationsTB(NotificationsObj notification) {
    SQLiteDatabase db = this.getWritableDatabase();
 
    ContentValues values = new ContentValues();
-   values.put(ID, notification.getId());
+   values.put(KEY_ID, notification.getId());
    values.put(NOTIFI_CATEGORYIMG, notification.getCategory_img());
    values.put(NOTIFI_MESSAGE, notification.getMessage());
    values.put(NOTIFI_NOTIFICATIONDATE, notification.getNotificationdate());
@@ -166,6 +166,7 @@ public long fillNotificationsTB(NotificationsObj notification) {
    values.put(NOTIFI_URLIMAGE, notification.getPictureurl());
    values.put(KEY_CREATED_AT, getDateTime());
    long notification_id=0;
+   
 	   if(isValidId(notification.getId(), TABLE_NOTIFICATION)==false){
 		   // insert row
 		   notification_id = db.insert(TABLE_NOTIFICATION, null, values);
@@ -175,8 +176,9 @@ public long fillNotificationsTB(NotificationsObj notification) {
 }
 public Cursor getAllNotifications(){
 	SQLiteDatabase db= this.getReadableDatabase();
-	String sql ="SELECT * FROM "+TABLE_NOTIFICATION;
-	Cursor mCursor=db.rawQuery(sql, null);
+	//String sql ="SELECT id As _id,"+NOTIFI_TITLE+","+NOTIFI_MESSAGE+","+NOTIFI_STATUS+","+NOTIFI_NOTIFICATIONDATE+" FROM "+TABLE_NOTIFICATION;
+	//Cursor mCursor=db.rawQuery(sql, null);
+	Cursor mCursor = db.query(TABLE_NOTIFICATION,new String[]{KEY_ID,NOTIFI_TITLE,NOTIFI_MESSAGE,NOTIFI_STATUS,NOTIFI_NOTIFICATIONDATE}, null, null, null, null, null);
 	if(mCursor!=null){
 		mCursor.moveToFirst();
 	}
@@ -184,14 +186,19 @@ public Cursor getAllNotifications(){
 }
 	     public boolean isValidId(int id,String table){
 	    	 boolean isValid = false;
-	    	 String selectQuery = "SELECT  * FROM " + table +" WHERE "+ID + "="+id;
-		   	 
-		        Log.e(LOG, selectQuery);
+	    	 String selectQuery = "SELECT * FROM " + table +" WHERE "+KEY_ID + "="+id;
+		   	 String query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
+		        Log.d(LOG, selectQuery);
 		 
 		        SQLiteDatabase db = this.getReadableDatabase();
-		        Cursor c = db.rawQuery(selectQuery, null);
-		        if(c.moveToFirst()){
-		        	isValid =true;
+		        if(db.rawQuery(query, null).getCount()==1){
+			        Cursor c = db.rawQuery(selectQuery, null);
+			        
+			        if(c.moveToFirst()){
+			        	isValid =true;
+			        }
+		        }else{
+		        	onCreate(db);
 		        }
 		        return isValid;
 	     }
@@ -203,7 +210,7 @@ public Cursor getAllNotifications(){
 	        SQLiteDatabase db = this.getWritableDatabase();
 	 
 	        ContentValues values = new ContentValues();
-	        values.put(ID, strengthReport.getId());
+	        values.put(KEY_ID, strengthReport.getId());
 	        values.put(DATE, strengthReport.getDate());
 	        values.put(SHIFT, strengthReport.getShift());
 	        values.put(REPORTED_BY, strengthReport.getReported_by());
@@ -248,7 +255,7 @@ public Cursor getAllNotifications(){
 		        if (c.moveToFirst()) {
 		            do {
 		                StrengthReport s = new StrengthReport();
-		                s.setId(c.getInt((c.getColumnIndex(ID))));
+		                s.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 		                s.setDate(c.getString(c.getColumnIndex(DATE)));
 		                s.setShift(c.getString(c.getColumnIndex(SHIFT)));
 		                s.setReported_by(c.getString(c.getColumnIndex(REPORTED_BY)));
@@ -299,7 +306,7 @@ public Cursor getAllNotifications(){
 			        if (c.moveToFirst()) {
 			            do {
 			                DiploymentCalc d = new DiploymentCalc();
-			                d.setId(c.getInt((c.getColumnIndex(ID))));
+			                d.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 			              
 			                // adding to tags list
 			                diployment.add(d);
@@ -342,7 +349,7 @@ public Cursor getAllNotifications(){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		 ContentValues values = new ContentValues();
-	        values.put(ID, diploymentCalc.getId());
+	        values.put(KEY_ID, diploymentCalc.getId());
 	        values.put(DATE, diploymentCalc.getDate());
 	        values.put(SHIFT, diploymentCalc.getShift());
 	        values.put(TOT_BIKES, diploymentCalc.getTotal_bikes());
@@ -375,7 +382,7 @@ public Cursor getAllNotifications(){
 	        if (c.moveToFirst()) {
 	            do {
 	                DiploymentCalc d = new DiploymentCalc();
-	                d.setId(c.getInt((c.getColumnIndex(ID))));
+	                d.setId(c.getInt((c.getColumnIndex(KEY_ID))));
 	                d.setDate(c.getString(c.getColumnIndex(DATE)));
 	                d.setShift(c.getString(c.getColumnIndex(SHIFT)));
 	                d.setTotal_bikes(c.getInt((c.getColumnIndex(TOT_BIKES))));
@@ -398,10 +405,10 @@ public Cursor getAllNotifications(){
 		// TODO Auto-generated method stub
 		String strDate =getDateFormat(date2);
         String strShift =getStringShift(shift2);
-        Log.e(LOG, strShift);
+        Log.d(LOG, strShift);
         String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "='"+strShift +"' AND SUBSTR(date,0,9)='"+strDate+"'";
         
-        Log.e(LOG, selectQuery);
+        Log.d(LOG, selectQuery);
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

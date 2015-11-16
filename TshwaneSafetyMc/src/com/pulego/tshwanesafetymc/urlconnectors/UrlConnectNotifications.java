@@ -30,7 +30,7 @@ import com.pulego.tshwanesafetymc.utils.NotificationFragment;
 
 public class UrlConnectNotifications {
    NotificationsObj notifications;
-   
+   List<NotificationsObj> lstNotificationList;
    private String URL_CONNECT_NOTIFICATIONS="http://196.33.249.226/android/tshwanesafety/managementconsole/get_notifications.php";
    // Creating JSON Parser object
    JSONParser jParser = new JSONParser();
@@ -50,6 +50,10 @@ public class UrlConnectNotifications {
 	public UrlConnectNotifications(Context c) {
 		super();
 		context=c;
+		lstNotificationList =new ArrayList<NotificationsObj>();
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+	  	  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+	  	  .penaltyLog().build());
 	}
 	public void fillNotifications(){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -100,8 +104,12 @@ public class UrlConnectNotifications {
                     if(_id==0){
                     	Log.d("Notification id :", "Already exist");
                     }else{
-                    	NotificationFragment notifyObject = new NotificationFragment();
-                    	notifyObject.displayNotification(c.getString("title"), c.getString("message"), c.getString("notificationdate"));
+                    	
+                    	if(c.getString("title") != null){
+                    		lstNotificationList.add(notifications);
+                    	 // NotificationFragment notifyObject = new NotificationFragment();
+                    	 // notifyObject.displayNotification(c.getString("title"), c.getString("message"), c.getString("notificationdate"));
+                    	}
                     }
                  }
                  db.closeDB();
@@ -113,6 +121,9 @@ public class UrlConnectNotifications {
              e.printStackTrace();
          }
 	}  
-	
+	public List<NotificationsObj> getAllNotifications(){
+		
+		return lstNotificationList;
+	}
 	
 }

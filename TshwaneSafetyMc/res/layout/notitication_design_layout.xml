@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="3dp"
         android:background="@drawable/button_layer" >
 
         <ImageView
@@ -16,18 +16,19 @@
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="32dp"
             android:layout_toLeftOf="@+id/txtNotificationTitle"
-            android:background="@drawable/button_layer"
             android:src="@drawable/ic_list_notification" />
-
+        
         <TextView
             android:id="@+id/txtNotificationTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView1"
             android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -40,7 +41,7 @@
             android:layout_alignRight="@+id/txtNotificationTime"
             android:layout_below="@+id/txtNotificationTitle"
             android:background="@drawable/notificationborder"
-            android:maxLines="4"
+            android:maxLines="3"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

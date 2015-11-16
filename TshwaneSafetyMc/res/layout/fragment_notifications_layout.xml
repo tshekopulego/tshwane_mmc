@@ -31,6 +31,7 @@
             android:id="@+id/lstNotifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/metro_green"
             android:headerDividersEnabled="false"
 	        android:footerDividersEnabled="false"
 	        android:divider="@color/gray_light"
