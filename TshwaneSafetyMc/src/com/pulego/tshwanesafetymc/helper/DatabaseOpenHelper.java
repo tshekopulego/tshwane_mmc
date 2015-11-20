@@ -146,44 +146,67 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	}
 
 	 /**
-* Creating notifications
-*/
-public long fillNotificationsTB(NotificationsObj notification) {
-   SQLiteDatabase db = this.getWritableDatabase();
-
-   ContentValues values = new ContentValues();
-   values.put(KEY_ID, notification.getId());
-   values.put(NOTIFI_CATEGORYIMG, notification.getCategory_img());
-   values.put(NOTIFI_MESSAGE, notification.getMessage());
-   values.put(NOTIFI_NOTIFICATIONDATE, notification.getNotificationdate());
-   values.put(NOTIFI_PUBLISHEDBY, notification.getPublishedby());
-   values.put(NOTIFI_SENDDATE, notification.getDate_sent());
-   values.put(NOTIFI_SENDER, notification.getSent_by());
-   values.put(NOTIFI_STATUS, notification.getStatus());
-   values.put(NOTIFI_TITLE, notification.getTitle());
-   values.put(NOTIFI_UPDATEDBY, notification.getUpdated_by());
-   values.put(NOTIFI_UPDATEDDATE, notification.getUpdated_date());
-   values.put(NOTIFI_URLIMAGE, notification.getPictureurl());
-   values.put(KEY_CREATED_AT, getDateTime());
-   long notification_id=0;
-   
-	   if(isValidId(notification.getId(), TABLE_NOTIFICATION)==false){
-		   // insert row
-		   notification_id = db.insert(TABLE_NOTIFICATION, null, values);
-	   }
-   db.close();
-   return notification_id;
-}
-public Cursor getAllNotifications(){
-	SQLiteDatabase db= this.getReadableDatabase();
-	//String sql ="SELECT id As _id,"+NOTIFI_TITLE+","+NOTIFI_MESSAGE+","+NOTIFI_STATUS+","+NOTIFI_NOTIFICATIONDATE+" FROM "+TABLE_NOTIFICATION;
-	//Cursor mCursor=db.rawQuery(sql, null);
-	Cursor mCursor = db.query(TABLE_NOTIFICATION,new String[]{KEY_ID,NOTIFI_TITLE,NOTIFI_MESSAGE,NOTIFI_STATUS,NOTIFI_NOTIFICATIONDATE}, null, null, null, null, null);
-	if(mCursor!=null){
-		mCursor.moveToFirst();
+	* Creating notifications
+	*/
+	public long fillNotificationsTB(NotificationsObj notification) {
+	   SQLiteDatabase db = this.getWritableDatabase();
+	
+	   ContentValues values = new ContentValues();
+	   values.put(KEY_ID, notification.getId());
+	   values.put(NOTIFI_CATEGORYIMG, notification.getCategory_img());
+	   values.put(NOTIFI_MESSAGE, notification.getMessage());
+	   values.put(NOTIFI_NOTIFICATIONDATE, notification.getNotificationdate());
+	   values.put(NOTIFI_PUBLISHEDBY, notification.getPublishedby());
+	   values.put(NOTIFI_SENDDATE, notification.getDate_sent());
+	   values.put(NOTIFI_SENDER, notification.getSent_by());
+	   values.put(NOTIFI_STATUS, notification.getStatus());
+	   values.put(NOTIFI_TITLE, notification.getTitle());
+	   values.put(NOTIFI_UPDATEDBY, notification.getUpdated_by());
+	   values.put(NOTIFI_UPDATEDDATE, notification.getUpdated_date());
+	   values.put(NOTIFI_URLIMAGE, notification.getPictureurl());
+	   values.put(KEY_CREATED_AT, getDateTime());
+	   long notification_id=0;
+	   
+		   if(isValidId(notification.getId(), TABLE_NOTIFICATION)==false){
+			   // insert row
+			   notification_id = db.insert(TABLE_NOTIFICATION, null, values);
+		   }
+	   db.close();
+	   return notification_id;
 	}
-	return mCursor;
-}
+	public Cursor getAllNotifications(){
+		SQLiteDatabase db= this.getReadableDatabase();
+		//String sql ="SELECT id As _id,"+NOTIFI_TITLE+","+NOTIFI_MESSAGE+","+NOTIFI_STATUS+","+NOTIFI_NOTIFICATIONDATE+" FROM "+TABLE_NOTIFICATION;
+		//Cursor mCursor=db.rawQuery(sql, null);
+		Cursor mCursor = db.query(TABLE_NOTIFICATION,new String[]{KEY_ID,NOTIFI_TITLE,NOTIFI_MESSAGE,NOTIFI_STATUS,NOTIFI_NOTIFICATIONDATE}, null, null, null, null, null);
+		if(mCursor!=null){
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+	}
+	public ArrayList<String[]> getAllNotification() {
+	
+		ArrayList<String[]> sl = new ArrayList<String[]>();
+	
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor res = db
+				.rawQuery(
+						"select * from tbl_notifications where _id > 0 order by notificationdate desc",
+						null);
+		res.moveToFirst();
+		while (res.isAfterLast() == false) {
+	
+			sl.add(new String[] {
+					res.getString(res.getColumnIndex(NOTIFI_TITLE)),
+					res.getString(res.getColumnIndex(NOTIFI_NOTIFICATIONDATE)),
+					res.getString(res.getColumnIndex(NOTIFI_MESSAGE)),
+					"http://test.tshwanesafety.co.za/dashboard/notification/img/"+res.getString(res
+							.getColumnIndex(NOTIFI_CATEGORYIMG)) });
+	
+			res.moveToNext();
+		}
+		return sl;
+	}
 	     public boolean isValidId(int id,String table){
 	    	 boolean isValid = false;
 	    	 String selectQuery = "SELECT * FROM " + table +" WHERE "+KEY_ID + "="+id;

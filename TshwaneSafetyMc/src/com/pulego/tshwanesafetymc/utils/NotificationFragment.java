@@ -1,8 +1,12 @@
 package com.pulego.tshwanesafetymc.utils;
 
+import java.util.ArrayList;
+
+import com.loopj.android.image.SmartImageView;
 import com.pulego.tshwanesafetymc.NotificationsActivity;
 import com.pulego.tshwanesafetymc.R;
 import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
+import com.pulego.tshwanesafetymc.httpconfig.ServerUtilities;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -22,16 +26,18 @@ import android.util.Log;
 //import android.support.v4.app.TaskStackBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NotificationFragment extends Fragment{
-	
+public class NotificationFragment extends Fragment implements OnClickListener{
+	private ListView obj;
 	private View rootView;
 	
 	private DatabaseOpenHelper dbHelper;
@@ -48,6 +54,11 @@ public class NotificationFragment extends Fragment{
 	
 	private Dialog dialog;
    
+	/** The feed list. */
+	private ArrayList<String[]> fList;
+	NotificationsAdapter arrayAdapter;
+	LayoutInflater layoutInflater;
+	TextView emptyMessage;
 	
     public NotificationFragment(){
     	
@@ -56,8 +67,9 @@ public class NotificationFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		rootView = inflater.inflate(R.layout.fragment_notifications_layout,container, false);
-		
+		//rootView = inflater.inflate(R.layout.fragment_notifications_layout,container, false);
+		rootView = inflater.inflate(R.layout.notification, null);
+		layoutInflater =inflater;
 		ActionBar actionBar = getActivity().getActionBar();
 		 
         // Screen handling while hiding ActionBar icon.
@@ -72,14 +84,130 @@ public class NotificationFragment extends Fragment{
         dbHelper = new DatabaseOpenHelper(rootView.getContext());
         
         lstNotifications = (ListView) rootView.findViewById(R.id.lstNotifications);
-        
-        displayListView();
+		
+        emptyMessage = (TextView) rootView.findViewById(R.id.empty);
+		
+        loadNotifications();
+        //displayListView();
         // new LoadStrengthReport().execute();
+        
+        if (fList.isEmpty()) {
+			obj.setVisibility(View.GONE);
+			emptyMessage.setVisibility(View.VISIBLE);
+		} else {
+			obj.setVisibility(View.VISIBLE);
+			emptyMessage.setVisibility(View.GONE);
+		}
+
+		obj.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View arg1,
+					int position, long arg3) {
+				Intent i = new Intent(getActivity(),
+						NotificationsActivity.class);
+				String[] value = (String[]) adapter.getItemAtPosition(position);
+				i.putExtra("title", value[0]);
+				i.putExtra("datetime", value[1]);
+				i.putExtra("message", value[2]);
+				i.putExtra("pictureurl", value[3]);
+				startActivity(i);
+			}
+		});
         
         return rootView;
  
 	}
-	
+	//-------------------------------------------------------------------------------------
+
+	private void loadNotifications() {
+
+		fList = dbHelper.getAllNotification();
+
+		arrayAdapter = new NotificationsAdapter();
+
+		// adding it to the list view.
+		obj = (ListView) rootView.findViewById(R.id.list);
+		
+		obj.setAdapter(arrayAdapter);
+		arrayAdapter.notifyDataSetChanged();
+
+	}
+
+	/**
+	 * The Class FeedAdapter is the adapter class for Feed ListView. The current
+	 * implementation simply shows dummy contents and you can customize this
+	 * class to display actual contents as per your need.
+	 */
+	private class NotificationsAdapter extends BaseAdapter {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.Adapter#getCount()
+		 */
+		@Override
+		public int getCount() {
+			return fList.size();
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.Adapter#getItem(int)
+		 */
+		@Override
+		public String[] getItem(int position) {
+			return fList.get(position);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.Adapter#getItemId(int)
+		 */
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.widget.Adapter#getView(int, android.view.View,
+		 * android.view.ViewGroup)
+		 */
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null)
+				
+				convertView = layoutInflater.inflate(
+						R.layout.notification_item, null);
+                
+			String[] d = getItem(position);
+			TextView lbl = (TextView) convertView.findViewById(R.id.title);
+			lbl.setText(d[0]);
+
+			lbl = (TextView) convertView.findViewById(R.id.message);
+			lbl.setText(d[2]);
+
+			TextView lblduration = (TextView) convertView
+					.findViewById(R.id.duration);
+			lblduration.setText(d[1]);
+
+			ServerUtilities.getTimeDifference(lblduration.getText().toString(),
+					lblduration);
+
+			SmartImageView img = (SmartImageView) convertView
+					.findViewById(R.id.loaderImageView);
+
+			img.setImageUrl(d[3]);
+
+			return convertView;
+		}
+
+	}
+	//-------------------------------------------------------------------------------------
 	private void displayListView() {
 		 
 		  final Cursor cursor = dbHelper.getAllNotifications();
@@ -270,6 +398,11 @@ public class NotificationFragment extends Fragment{
 
 		
 
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

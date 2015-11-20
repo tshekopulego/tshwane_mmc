@@ -172,24 +172,27 @@ public final class R {
     }
     public static final class id {
         public static final int FrameLayout1=0x7f0a0027;
-        public static final int action_settings=0x7f0a004a;
+        public static final int action_settings=0x7f0a0052;
         public static final int barchart=0x7f0a001b;
         public static final int btnChangePassword=0x7f0a001a;
         public static final int btnClose=0x7f0a0014;
         public static final int btnPasswordrecovery=0x7f0a000d;
         public static final int chart=0x7f0a0026;
+        public static final int close=0x7f0a0053;
         public static final int content_frame=0x7f0a0001;
         public static final int drawerTitle=0x7f0a001f;
         public static final int drawer_icon=0x7f0a0021;
         public static final int drawer_icon1=0x7f0a001d;
         public static final int drawer_itemName=0x7f0a0022;
         public static final int drawer_layout=0x7f0a0000;
+        public static final int duration=0x7f0a004b;
         public static final int editText1=0x7f0a0017;
         public static final int editText2=0x7f0a0018;
         public static final int editText3=0x7f0a0019;
         public static final int email=0x7f0a0009;
         public static final int email_login_form=0x7f0a0008;
         public static final int email_sign_in_button=0x7f0a000b;
+        public static final int empty=0x7f0a0047;
         public static final int frag1_icon=0x7f0a0029;
         public static final int frag1_text=0x7f0a002a;
         public static final int frag2_icon=0x7f0a002d;
@@ -204,18 +207,22 @@ public final class R {
         public static final int left_drawer=0x7f0a0002;
         public static final int left_pic=0x7f0a0023;
         public static final int linearLayout1=0x7f0a0015;
+        public static final int list=0x7f0a0046;
         public static final int listStrengthReport=0x7f0a003e;
         public static final int ll1=0x7f0a0004;
         public static final int ll2=0x7f0a0006;
         public static final int ll3=0x7f0a000c;
+        public static final int loaderImageView=0x7f0a0049;
         public static final int login_form=0x7f0a0003;
         public static final int login_progress=0x7f0a0007;
         public static final int lstNotifications=0x7f0a002f;
+        public static final int message=0x7f0a004d;
         public static final int messaging=0x7f0a0028;
         public static final int password=0x7f0a000a;
-        public static final int piechart=0x7f0a0049;
+        public static final int piechart=0x7f0a0051;
         public static final int scrollView1=0x7f0a000f;
         public static final int spinnerLayout=0x7f0a001c;
+        public static final int subTitle=0x7f0a004a;
         public static final int sub_text_email=0x7f0a0025;
         public static final int table=0x7f0a0038;
         public static final int tableRow1=0x7f0a0041;
@@ -226,6 +233,8 @@ public final class R {
         public static final int textView5=0x7f0a0035;
         public static final int text_main_name=0x7f0a0024;
         public static final int textstrength=0x7f0a0037;
+        public static final int thumbnail=0x7f0a004c;
+        public static final int title=0x7f0a0048;
         public static final int txtDateNotifi=0x7f0a0013;
         public static final int txtEmail=0x7f0a0034;
         public static final int txtMessageNews=0x7f0a0012;
@@ -234,9 +243,9 @@ public final class R {
         public static final int txtNoMotorCycle=0x7f0a0045;
         public static final int txtNoPerson=0x7f0a0043;
         public static final int txtNotif=0x7f0a000e;
-        public static final int txtNotificationMessage=0x7f0a0046;
-        public static final int txtNotificationStatus=0x7f0a0048;
-        public static final int txtNotificationTime=0x7f0a0047;
+        public static final int txtNotificationMessage=0x7f0a004e;
+        public static final int txtNotificationStatus=0x7f0a0050;
+        public static final int txtNotificationTime=0x7f0a004f;
         public static final int txtNotificationTitle=0x7f0a0016;
         public static final int txtPosition=0x7f0a0032;
         public static final int txtPrograss=0x7f0a0040;
@@ -274,9 +283,12 @@ public final class R {
         public static final int fragment_strength_layout=0x7f030013;
         public static final int line_chat_layout=0x7f030014;
         public static final int listview_layout_design=0x7f030015;
-        public static final int notification_details=0x7f030016;
-        public static final int notitication_design_layout=0x7f030017;
-        public static final int pie_chat_layout=0x7f030018;
+        public static final int notification=0x7f030016;
+        public static final int notification_detail=0x7f030017;
+        public static final int notification_details=0x7f030018;
+        public static final int notification_item=0x7f030019;
+        public static final int notitication_design_layout=0x7f03001a;
+        public static final int pie_chat_layout=0x7f03001b;
     }
     public static final class menu {
         public static final int home=0x7f090000;
