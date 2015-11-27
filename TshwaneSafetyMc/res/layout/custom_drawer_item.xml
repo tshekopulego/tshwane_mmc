@@ -4,7 +4,7 @@
     android:layout_height="fill_parent" >
 
     
-     <LinearLayout
+     <!--  <LinearLayout
         android:id="@+id/spinnerLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -18,13 +18,13 @@
 		            android:src="@drawable/user1"
 		            />
          
-         <!--   <Spinner
+          <Spinner
 		            android:id="@+id/drawerSpinner"
 		            android:layout_width="fill_parent"
 		            android:layout_height="0dp"
 		            android:layout_weight="1" />
-		            --> 
-    </LinearLayout>
+		          
+    </LinearLayout>  --> 
     
     <LinearLayout
         android:id="@+id/headerLayout"
@@ -75,6 +75,9 @@
 		            android:id="@+id/drawer_icon"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
+		            android:layout_marginRight="10dp"
+		            android:layout_marginLeft="20dp"
+		            android:background="@drawable/menu_icon"
 		            />
 
 		      

@@ -4,98 +4,124 @@
     android:orientation="vertical" android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:paddingTop="@dimen/activity_vertical_margin" 
+    tools:context=".MainActivity"
     android:background="@drawable/phonenumberbackground"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 <!--   android:background="#ffBE80FF" -->
-    <LinearLayout
-        android:id="@+id/ll1"
+    <ScrollView android:id="@+id/login_form" 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Tshwane Safety"
-            android:id="@+id/textView2"
-            android:textStyle="bold"
-            android:textSize="30dp"
-            android:textColor="@android:color/holo_green_dark" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal">
-        <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout 
-                    android:id="@+id/email_login_form"
-                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    
-                     android:orientation="vertical">
-
-                    <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:hint="@string/prompt_email"
-                        android:inputType="textEmailAddress" android:maxLines="1"
-                        android:singleLine="true"
-                        android:layout_marginBottom="10dp"
-                        android:drawableLeft="@android:drawable/sym_action_email"
-                        android:background="@android:drawable/editbox_background"
-                        android:textColorHint="@android:color/darker_gray"
-                        android:textColor="@android:color/black" />
-
-                    <EditText android:id="@+id/password" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:hint="@string/prompt_password"
-                        android:imeActionLabel="@string/action_sign_in"
-                        android:drawableLeft="@android:drawable/ic_secure"
-                        android:background="@android:drawable/editbox_background"
-                        android:imeOptions="actionUnspecified" android:inputType="textPassword"
-                        android:maxLines="1" android:singleLine="true"
-                        android:layout_marginBottom="10dp"
-                        android:textColorHint="@android:color/darker_gray"
-                        android:textColor="#ffffffff" />
-
-                    <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp" android:text="@string/action_sign_in"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                         android:background="@android:color/holo_green_dark"/>
-
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="bottom|center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="forgot password ?"
-            android:id="@+id/resetTextView"
-            android:autoLink="web"
-            android:textColor="#002EB8" />
-    </LinearLayout>
+        android:layout_height="match_parent">
+		     <LinearLayout
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:orientation="vertical">
+				    <LinearLayout
+				        android:id="@+id/ll1"
+				        android:layout_width="match_parent"
+				        android:layout_height="106dp"
+				        android:gravity="center_vertical|center_horizontal" >
+				
+				        <TextView
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content"
+				            android:textAppearance="?android:attr/textAppearanceLarge"
+				            android:text="Login"
+				            android:id="@+id/textView2"
+				            android:textStyle="bold"
+				            android:textSize="30sp"
+				            android:textColor="@android:color/holo_green_dark" />
+				
+				    </LinearLayout>
+				
+				    <LinearLayout
+				        android:id="@+id/ll2"
+				        android:layout_width="match_parent"
+				        android:layout_height="match_parent"
+				        android:layout_weight="1"
+				        android:gravity="center_vertical|center_horizontal">
+				        <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
+				            android:layout_width="wrap_content" android:layout_height="wrap_content"
+				            android:visibility="gone" />
+				       <!--   <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
+				            android:layout_height="wrap_content">-->
+				            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				                android:orientation="vertical">
+				
+				                <LinearLayout
+				                    android:id="@+id/email_login_form"
+				                    android:layout_width="match_parent"
+				                    android:layout_height="wrap_content"
+				                    android:orientation="vertical" >
+				
+				                    <EditText
+				                        android:id="@+id/email"
+				                        android:layout_width="match_parent"
+				                        android:layout_height="40dp"
+				                        android:layout_marginBottom="10dp"
+				                        android:background="@drawable/button_layer"
+				                        android:drawableLeft="@drawable/ic_list_profile"
+				                        android:hint="@string/prompt_username"
+				                        android:inputType="textEmailAddress"
+				                        android:maxLines="1"
+				                        android:singleLine="true"
+				                        android:textColor="@android:color/black"
+				                        android:textColorHint="#000"
+				                        android:textSize="12sp" />
+				
+				                    <EditText
+				                        android:id="@+id/password"
+				                        android:layout_width="match_parent"
+				                        android:layout_height="40dp"
+				                        android:layout_marginBottom="10dp"
+				                        android:background="@drawable/button_layer"
+				                        android:drawableLeft="@drawable/ic_secure"
+				                        android:hint="@string/prompt_password"
+				                        android:imeActionLabel="@string/action_sign_in"
+				                        android:imeOptions="actionUnspecified"
+				                        android:inputType="textPassword"
+				                        android:maxLines="1"
+				                        android:singleLine="true"
+				                        android:textColor="#ffffffff"
+				                        android:textColorHint="#000"
+				                        android:textSize="12sp" />
+				
+				                    <Button
+				                        android:id="@+id/email_sign_in_button"
+				                        android:layout_width="match_parent"
+				                        android:layout_height="50dp"
+				                        android:drawableLeft="@drawable/ic_login"
+				                        android:layout_marginTop="0dp"
+				                        android:background="@drawable/button_submit"
+				                        android:gravity="center"
+				                        android:text="@string/action_sign_in"
+				                        android:textColor="@color/black" />
+				                </LinearLayout>
+				
+				            </LinearLayout>
+				       <!--  </ScrollView> -->
+				    </LinearLayout>
+				
+				    <LinearLayout
+				        android:id="@+id/ll3"
+				        android:layout_width="match_parent"
+				        android:layout_height="match_parent"
+				        android:layout_weight="1"
+				        android:gravity="bottom|center_horizontal">
+				
+				        <TextView
+				            android:id="@+id/btnPasswordrecovery"
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content"
+				            android:autoLink="web"
+				            android:linksClickable="true"
+				            android:text="forgot password ?"
+				            android:textColor="#002EB8"
+				            android:textSize="20sp"
+				            android:textStyle="bold" />
+				
+				    </LinearLayout>
+		    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

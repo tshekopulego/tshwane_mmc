@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_strength_details">Strength report here.</string>
+    <string name="user_strength_detail">Detail strength report here.</string>
+    <string name="list_view_strength_report">lstStrengthReport</string>
+    <string name="regions_name">Regions</string>
+</resources>

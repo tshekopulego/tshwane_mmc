@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green" >
+
+        <TextView
+            android:id="@+id/txtNotif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Notification details."
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5.0dip"
+        android:background="@drawable/button_layer"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/pad_10dp" >
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.51" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical" 
+                    android:background="@drawable/button_layer">
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_list_notification" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="202dp"
+                    android:background="@drawable/button_layer"
+                    android:gravity="top|left"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/txtTitleNews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="title"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/txtMessageNews"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="0.12"
+                        android:text="notification" />
+
+                    <TextView
+                        android:id="@+id/txtDateNotifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="date and time"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                </LinearLayout>
+                 
+          
+            <LinearLayout android:layout_width="match_parent"
+                 android:layout_height="wrap_content" 
+                 android:layout_margin="5.0dip" 
+                 android:background="@drawable/button_layer"
+                  android:gravity="center"
+                   android:orientation="vertical">
+                <Button android:id="@+id/btnClose"
+                     android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                       android:layout_margin="3dp"
+                        android:background="@drawable/button_submit" 
+                        android:drawableLeft="@android:drawable/ic_menu_close_clear_cancel"
+                         android:text="Close"/>
+            </LinearLayout> 
+             </LinearLayout>
+        </ScrollView>
+        
+    </LinearLayout>
+</LinearLayout>
+
+

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.Paint.Align;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,7 @@ public class FragmentThree extends Fragment implements TabListener{
 		interfaceUtilsListener=null;
 	}
 
-	@Override
+	/*@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
@@ -64,7 +65,7 @@ public class FragmentThree extends Fragment implements TabListener{
 			 + " must implement OnFragmentInteractionListener");
 			 }
 			
-	}
+	}*/
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +77,9 @@ public class FragmentThree extends Fragment implements TabListener{
 		// Asking for the default ActionBar element that our platform supports.
 		//	ActionBar actionBar = getActionBar();
 		ActionBar actionBar = getActivity().getActionBar();
-				 
+		if(actionBar.getTabCount()>0){
+		actionBar.removeAllTabs();
+		}
 		        // Screen handling while hiding ActionBar icon.
 		       actionBar.setDisplayShowHomeEnabled(true);
 		 
@@ -85,13 +88,19 @@ public class FragmentThree extends Fragment implements TabListener{
 		 
 		        // Creating ActionBar tabs.
 		        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		      
 		        //Changing background color on action bar
-		       // actionBar.setBackgroundDrawable();
-		        
-		        // Setting custom tab icons.
+		    	actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
+		    	//Setting an action bar Icon
+		        actionBar.setIcon(R.drawable.icon);
+		        //change the background color of the tab
+		        actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
+		        // Setting custom tab names.
 		        barTab = actionBar.newTab().setText("Type");
 		        pieTab = actionBar.newTab().setText("Status");
 		        lineTab = actionBar.newTab().setText("Incidents");
+		        
+		        
 		        //initializing all the tabs
 		        com.pulego.tshwanesafetymc.utils.TabListener bar=new com.pulego.tshwanesafetymc.utils.TabListener(barFragmentTab);
 		        com.pulego.tshwanesafetymc.utils.TabListener pie=new com.pulego.tshwanesafetymc.utils.TabListener(pieFragmentTab);
@@ -102,6 +111,8 @@ public class FragmentThree extends Fragment implements TabListener{
 		        lineTab.setTabListener(line);
 		      
 		        // Adding tabs to the ActionBar.
+		        
+		      //  if(actionBar.isShowing()){}else{}
 		        actionBar.addTab(lineTab);
 		        actionBar.addTab(pieTab);
 		        actionBar.addTab(barTab);
