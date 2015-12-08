@@ -267,12 +267,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		        //String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT;
 		        String strDate =getDateFormat(date);
 		        String strShift =getStringShift(shift);
-		        String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "="+strShift +" AND "+DATE +"="+strDate;
-			   	 
+		       // String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "="+strShift +" AND "+DATE +"="+strDate;
+		        String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "='"+strShift +"' AND substr(date,1,10) = '"+date+"'";
 		        Log.e(LOG, selectQuery);
 		 
 		        SQLiteDatabase db = this.getReadableDatabase();
-		        Cursor c = db.rawQuery(selectQuery, null);
+		        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE shift=? AND substr(date,1,10)=?", new String[]{strShift,date});
 		 
 		        // looping through all rows and adding to list
 		        if (c.moveToFirst()) {
@@ -360,7 +360,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	    	Date _date = new Date(date);
 	    	
 	    	SimpleDateFormat dateFormat = new SimpleDateFormat(
-	                "yyyy/MM/dd");
+	                "yyyy-MM-dd");
 	    	strDate =dateFormat.format(_date);
     	}else{
     		strDate = date;
@@ -426,15 +426,22 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	public Cursor readEntry(String date2, String shift2) {
 		// TODO Auto-generated method stub
+        SQLiteDatabase db = this.getReadableDatabase();
+        
 		String strDate =getDateFormat(date2);
         String strShift =getStringShift(shift2);
         Log.d(LOG, strShift);
-        String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "='"+strShift +"' AND SUBSTR(date,0,9)='"+strDate+"'";
+        String selectQuery = "SELECT  * FROM " + TABLE_STRENGTH_REPORT +" WHERE "+SHIFT + "='"+strShift +"' AND substr(date,1,10) = '"+date2+"'";
         
         Log.d(LOG, selectQuery);
  
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
+
+       // Cursor c = db.rawQuery(selectQuery, null);
+        Cursor c = db.rawQuery("SELECT * FROM "+TABLE_STRENGTH_REPORT+ " WHERE shift =? AND substr(date,1,10) =?", new String[]{strShift,date2});
+        
+        if(c.moveToFirst()){
+        	Log.d(LOG, "Wow the cursor has rows!!! Lol");
+        }
 		return c;
 	}
 	   

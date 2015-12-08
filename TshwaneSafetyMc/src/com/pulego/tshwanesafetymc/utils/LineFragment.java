@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.BasicStroke;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
-
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.FillFormatter;
+import com.github.mikephil.charting.interfaces.LineDataProvider;
 import com.pulego.tshwanesafetymc.R;
 import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
-import com.pulego.tshwanesafetymc.pojos.ConvertToStringArray;
 import com.pulego.tshwanesafetymc.pojos.Incidents;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
@@ -30,257 +29,151 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class LineFragment extends Fragment {
 	LinearLayout chartLayout;
 	   
-	private View mChart;
+	private View mcChart;
 
 	private DatabaseOpenHelper db;
 	
-	 
+	private LineChart mChart;
+	 private SeekBar mSeekBarX, mSeekBarY;
+	private TextView tvX, tvY;
+	    
+	private Typeface tf;
+	 View rootView;
 	public LineFragment(){
 	}
    @Override
 public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 	// TODO Auto-generated method stub
-	   View rootView = inflater.inflate(R.layout.line_chat_layout, container, false);
-		 chartLayout = (LinearLayout) rootView.findViewById(R.id.chart);
+	   rootView = inflater.inflate(R.layout.line_chat_layout, container, false);
+		// chartLayout = (LinearLayout) rootView.findViewById(R.id.chart);
 		 //objArrays=new IncidentsConverted(rootView.getContext());
 		 db = new DatabaseOpenHelper(rootView.getContext());
-		 openChart(rootView.getContext(),chartLayout);
+		// openChart(rootView.getContext(),chartLayout);
+		 
+		 //**************************************************************************************
+		 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+	                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 
+		 mChart =(LineChart) rootView.findViewById(R.id.chart1);
+	        mChart.setDescription("Weekly Summary of Incidents");
+	        mChart.setViewPortOffsets(0, 20, 0, 0);
+	        mChart.setBackgroundColor(Color.rgb(104, 241, 175));
+	        
+	        // enable touch gestures
+	        mChart.setTouchEnabled(true);
+
+	        // enable scaling and dragging
+	        mChart.setDragEnabled(true);
+	        mChart.setScaleEnabled(true);
+
+	        // if disabled, scaling can be done on x- and y-axis separately
+	        mChart.setPinchZoom(false);
+
+	        mChart.setDrawGridBackground(true);
+	        
+	        tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
+	  
+	        XAxis x = mChart.getXAxis();
+	        x.setEnabled(true);
+	        
+	        YAxis y = mChart.getAxisLeft();
+	        y.setTypeface(tf);
+	        y.setLabelCount(6, false);
+	        y.setStartAtZero(false);
+	        y.setTextColor(Color.BLACK);
+	        y.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+	        y.setDrawGridLines(false);
+	        y.setAxisLineColor(Color.BLACK);
+	        
+	        mChart.getAxisRight().setEnabled(false);
+	       // mChart.setGridBackgroundColor(Color.GRAY);
+	        // add data
+	        setData(45, 100);
+	        
+	        mChart.getLegend().setEnabled(false);
+	        
+	        mChart.animateXY(2000, 2000);
+
+	        // dont forget to refresh the drawing
+	        mChart.invalidate();
+		 
+		 //***************************************************************************************
 	return rootView;
 }
-   public void openChart(Context c, LinearLayout l) {
-		// TODO Auto-generated method stub
+   private void setData(int count, float range) {
+	// TODO Auto-generated method stub
+	   UrlConnectHome incidenrtsObj = new UrlConnectHome(getActivity().getApplicationContext());
+       ArrayList<Incidents> incidentsList= (ArrayList<Incidents>) incidenrtsObj.populateTblIncidents();
+	   
+	   ArrayList<String> xVals = new ArrayList<String>();
+      /* for (int i = 0; i < count; i++) {
+           xVals.add((1990 +i) + "");
+       }*/
+       
+       for(int i=0; i< incidentsList.size();i++){
+
+	    	xVals.add(incidentsList.get(i).getDateOfIncidents());
+             // Log.d("Date of Inc", ""+incidentsList.get(i).getDateOfIncidents());
+	   }
+
+       ArrayList<Entry> vals1 = new ArrayList<Entry>();
+
+      /* for (int i = 0; i < count; i++) {
+           float mult = (range + 1);
+           float val = (float) (Math.random() * mult) + 20;// + (float)
+                                                     // ((mult *
+                                                          // 0.1) / 10);
+          vals1.add(new Entry(val, i));
+          // vals1.add(new Entry(incidentsList.get(i).getTotalNoOfIncidents() , i));
+       }*/
+       
+       for(int i=0;i<incidentsList.size();i++){
+           
+	    	vals1.add(new Entry(incidentsList.get(i).getTotalNoOfIncidents(),i));
+	    	
+
+	    }
+       
+       // create a dataset and give it a type
+       LineDataSet set1 = new LineDataSet(vals1, "Incidents");
+       set1.setDrawCubic(true);
+       set1.setCubicIntensity(0.2f);
+       set1.setDrawFilled(true);
+       set1.setDrawCircles(false); 
+       set1.setLineWidth(1.8f);
+       set1.setCircleSize(4f);
+       set1.setCircleColor(Color.DKGRAY);
+       set1.setHighLightColor(Color.rgb(244, 117, 117));
+       set1.setColor(Color.WHITE);
+       set1.setFillColor(Color.GRAY);
+       set1.setFillAlpha(100);
+       set1.setDrawHorizontalHighlightIndicator(false);
+       set1.setFillFormatter(new FillFormatter() {
+           @Override
+           public float getFillLinePosition(LineDataSet dataSet, LineDataProvider dataProvider) {
+               return -10;
+           }
+       });
+       
+       // create a data object with the datasets
+       LineData data = new LineData(xVals, set1);
+       data.setValueTypeface(tf);
+       data.setValueTextSize(9f);
+       data.setDrawValues(false);
+
+       // set data
+       mChart.setData(data);
+   }
 
-                UrlConnectHome incidenrtsObj = new UrlConnectHome(c);
-	             ArrayList<Incidents> incidentsList= (ArrayList<Incidents>) incidenrtsObj.populateTblIncidents();
-                 ConvertToStringArray convert=new ConvertToStringArray();
-	             //Converting Arraylist to array of string
-                // String[] incidentsDate = convert.getStringArrayIncidentsDate(incidentsList);
-		    	//int[] incidentsTotal = convert.getStringArrayIncidentsTotal(incidentsList);
-	             // Creating an XYSeries for Income
-		    	XYSeries incidentsSeries = new XYSeries("Incidents");
-
-		    	// Adding data to Income and Expense Series
-
-		    	for(int i=0;i<incidentsList.size();i++){
-               
-		    	incidentsSeries.add(i, incidentsList.get(i).getTotalNoOfIncidents());
-		    	
-
-		    	}
-
-		    	/* for(int i=0; i < incidentsTotal.length ; i++){
-		    		 incidentsSeries.add(i, incidentsTotal[i]);
-		    	 }*/
-
-		    	// Creating a dataset to hold each series
-                
-		    	XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-
-		    	// Adding Incidents Series to the dataset
-		    	dataset.addSeries(incidentsSeries);
-		    	
-              
-		    	// Creating XYSeriesRenderer to customize incomeSeries
-		    	XYSeriesRenderer incidentsRenderer = new XYSeriesRenderer();
-
-		    	incidentsRenderer.setColor(Color.BLUE); //color of the graph set to cyan
-
-		    	incidentsRenderer.setFillPoints(true);
-
-		    	incidentsRenderer.setLineWidth(2f);
-
-		    	incidentsRenderer.setDisplayChartValues(true);
-
-		    	//setting chart value distance
-
-		    	incidentsRenderer.setDisplayChartValuesDistance(10);
-
-		    	//setting line graph point style to circle
-
-		    	incidentsRenderer.setPointStyle(PointStyle.CIRCLE);
-
-		    	//setting stroke of the line chart to solid
-
-		    	incidentsRenderer.setStroke(BasicStroke.SOLID);
-		    	
-		    	
-		    	// Creating a XYMultipleSeriesRenderer to customize the whole chart
-               
-		    	XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
-            
-		    	multiRenderer.setXLabels(10);
-		    	
-		    	//multiRenderer.setBackgroundColor(Color.BLACK);
-
-		    	multiRenderer.setChartTitle("Weekly Summary of Incidents");
-          
-		    //	Date d=new Date();
-		    	multiRenderer.setXTitle("Date of Incidents");
-
-		    	multiRenderer.setYTitle("Number of Incidents");
-
-		    	 
-
-		    	/***
-
-		    	* Customizing graphs
-
-		    	*/
-
-		    	//setting text size of the title
-
-		    	multiRenderer.setChartTitleTextSize(16);
-
-		    	//setting text size of the axis title
-
-		    	multiRenderer.setAxisTitleTextSize(12);
-
-		    	//setting text size of the graph lable
-
-		    	multiRenderer.setLabelsTextSize(10);
-
-		    	//setting zoom buttons visiblity
-		    	multiRenderer.setZoomButtonsVisible(false);
-
-		    	//setting pan enablity which uses graph to move on both axis
-		    	multiRenderer.setPanEnabled(false, false);
-
-		    	//setting click false on graph
-		    	multiRenderer.setClickEnabled(false);
-
-		    	//setting zoom to false on both axis
-		    	multiRenderer.setZoomEnabled(false, false);
-
-		    	//setting lines to display on y axis
-		    	multiRenderer.setShowGridY(true);
-
-		    	//setting lines to display on x axis
-
-		    	multiRenderer.setShowGridX(true);
-
-		    	//setting legend to fit the screen size
-
-		    	multiRenderer.setFitLegend(true);
-
-		    	//setting displaying line on grid
-
-		    	multiRenderer.setShowGrid(true);
-
-		    	//setting zoom to false
-
-		    	multiRenderer.setZoomEnabled(false);
-
-		    	//setting external zoom functions to false
-
-		    	multiRenderer.setExternalZoomEnabled(false);
-
-		    	//setting displaying lines on graph to be formatted(like using graphics)
-
-		    	multiRenderer.setAntialiasing(true);
-
-		    	//setting to in scroll to false
-
-		    	multiRenderer.setInScroll(true);
-
-		    	//setting to set legend height of the graph
-
-		    	multiRenderer.setLegendHeight(30);
-
-		    	//setting x axis label align
-
-		    	multiRenderer.setXLabelsAlign(Align.CENTER);
-
-		    	//setting y axis label to align
-
-		    	multiRenderer.setYLabelsAlign(Align.LEFT);
-
-		    	//setting text style
-
-		    	multiRenderer.setTextTypeface("sans_serif", Typeface.NORMAL);
-
-		    	//setting no of values to display in y axis
-
-		    	multiRenderer.setYLabels(7);
-
-		    	// setting y axis max value, Since i'm using static values inside the graph so i'm setting y max value to 4000.
-
-		    	// if you use dynamic values then get the max y value and set here
-
-		    	multiRenderer.setYAxisMax(50);
-
-		    	//setting used to move the graph on xaxiz to .5 to the right
-
-		    	multiRenderer.setXAxisMin(-0.5);
-
-		    	//setting used to move the graph on xaxiz to .5 to the right
-
-		    	multiRenderer.setXAxisMax(7);
-
-		    	//setting bar size or space between two bars
-
-		    	//multiRenderer.setBarSpacing(0.5);
-		    	multiRenderer.setAxesColor(Color.BLACK);
-		    	multiRenderer.setXLabelsColor(Color.RED);
-		    	multiRenderer.setMarginsColor(Color.WHITE);
-		    	multiRenderer.setLabelsColor(Color.GREEN);
-		 
-		    	//Setting background color of the graph to transparent
-
-		    	multiRenderer.setBackgroundColor(Color.BLACK);
-
-		    	//Setting margin color of the graph to transparent
-		    	//multiRenderer.setMarginsColor(getResources().getColor(R.color.transparent_background));
-
-		    	multiRenderer.setApplyBackgroundColor(true);
-
-		    	multiRenderer.setScale(2f);
-
-		    	//setting x axis point size
-		    	multiRenderer.setPointSize(4f);
-
-		    	//setting the margin size for the graph in the order top, left, bottom, right
-		    	multiRenderer.setMargins(new int[]{30, 30, 30, 30});
-		    	
-
-		    	for(int i=0; i< incidentsList.size();i++){
-
-		    	multiRenderer.addXTextLabel(i,incidentsList.get(i).getDateOfIncidents());
-                   Log.d("Date of Inc", ""+incidentsList.get(i).getDateOfIncidents());
-		    	}
-		    	
-		    /*	for(int i=0; i < incidentsDate.length; i++){
-		    		multiRenderer.addXTextLabel(i,incidentsDate[i]);
-		    	}*/
-
-		    	// Adding incomeRenderer and expenseRenderer to multipleRenderer
-
-		    	// Note: The order of adding dataseries to dataset and renderers to multipleRenderer
-
-		    	// should be same
-		    	multiRenderer.addSeriesRenderer(incidentsRenderer);
-		    	multiRenderer.setXLabelsAngle(300);
-		    	//multiRenderer.addSeriesRenderer(incomeRenderer);
-
-		    	//multiRenderer.addSeriesRenderer(expenseRenderer);
-
-		    	//this part is used to display graph on the xml
-		    	LinearLayout chartContainer = (LinearLayout) l;
-
-		    	//remove any views before u paint the chart
-		    	chartContainer.removeAllViews();
-
-		    	//drawing bar chart
-		    	mChart = ChartFactory.getLineChartView(c, dataset, multiRenderer);
-
-		    	//adding the view to the linearlayout
-		    	chartContainer.addView(mChart);
-	}
 
    private String getYear() {
        /*SimpleDateFormat dateFormat = new SimpleDateFormat(

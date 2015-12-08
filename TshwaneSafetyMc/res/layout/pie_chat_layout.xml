@@ -4,13 +4,19 @@
     android:layout_height="match_parent"
     android:gravity="center" >
 
-    <LinearLayout
+   <!--   <LinearLayout
         android:id="@+id/piechart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
          >
-    </LinearLayout>
+    </LinearLayout>-->
+    
+     <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       />
 
 </RelativeLayout>

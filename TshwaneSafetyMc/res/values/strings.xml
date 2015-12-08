@@ -9,5 +9,6 @@
     <string name="drawer_close">Close drawer</string>
     <string name="title_activity_password_reset">Reset Password</string>
     <string name="title_activity_notifications">Notifications</string>
+    <string name="title_activity_splash_screen">Tshwane Safety MC-beta</string>
 
 </resources>

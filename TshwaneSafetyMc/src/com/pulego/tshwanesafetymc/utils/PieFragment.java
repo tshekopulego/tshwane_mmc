@@ -1,24 +1,32 @@
 package com.pulego.tshwanesafetymc.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.model.CategorySeries;
-import org.achartengine.renderer.DefaultRenderer;
-import org.achartengine.renderer.SimpleSeriesRenderer;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.pulego.tshwanesafetymc.R;
 import com.pulego.tshwanesafetymc.pojos.ObjectStatus;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class PieFragment extends Fragment {
 	
@@ -26,8 +34,12 @@ public class PieFragment extends Fragment {
 	
 	private LinearLayout chartLayout;
 	   
-	private View mChart;
+	private View mcChart;
 	UrlConnectHome urlconnect;
+	
+	private PieChart mChart;
+    private float[] yData = {5,10,15,30,40};
+    private String[] xData ={"Sony","Huawei","LG","Apple","Samsung"};
 	
 public PieFragment(){
 	
@@ -37,88 +49,119 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 	// TODO Auto-generated method stub
 	 rootView = inflater.inflate(R.layout.pie_chat_layout, container, false);
-	 chartLayout=(LinearLayout)rootView.findViewById(R.id.piechart);
+	// chartLayout=(LinearLayout)rootView.findViewById(R.id.piechart);
 	 urlconnect = new UrlConnectHome(rootView.getContext()); 
-	 openChart(rootView.getContext(), chartLayout);
+	// openChart(rootView.getContext(), chartLayout);
+	 //*********************************************************************
+	 getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	 
+
+     mChart=(PieChart) rootView.findViewById(R.id.chart2);
+     mChart.setUsePercentValues(true);
+     mChart.setDescription("Status weekly summary ");
+     mChart.setExtraOffsets(5, 10, 5, 5);
+     
+     mChart.setDrawHoleEnabled(true);
+     mChart.setHoleColorTransparent(true);
+     mChart.setHoleRadius(35);
+    mChart.setTransparentCircleRadius(10);
+    // mChart.setTransparentCircleAlpha(110);
+     //mChart.setHoleRadius(58f);
+    // mChart.setTransparentCircleRadius(61f);
+     
+     mChart.setRotationAngle(0);
+     mChart.setRotationEnabled(true);
+     
+     mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+			
+			@Override
+			public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+				// TODO Auto-generated method stub
+				if(e==null){
+					return;
+				}else{
+					Toast.makeText(getActivity().getApplicationContext(), xData[e.getXIndex()]+" "+e.getVal(), Toast.LENGTH_SHORT).show();
+				}
+			}
+			
+			@Override
+			public void onNothingSelected() {
+				// TODO Auto-generated method stub
+				
+			}
+
+		});
+     //add data
+     addData();
+     
+     //customize
+     Legend l =mChart.getLegend();
+     l.setPosition(LegendPosition.RIGHT_OF_CHART);
+     l.setXEntrySpace(7);
+     l.setYEntrySpace(5);
+     
+	 
+	 //*********************************************************************
 	return rootView;
 }
-  private void openChart(Context c, LinearLayout l) {
+  
+  private void addData() {
+		// TODO Auto-generated method stub
+	  List<ObjectStatus> listSATUS=urlconnect.populateTblStatus();
 	  
-      // Pie Chart Section Names
-    //  String[] code = new String[] { "Froyo", "Gingerbread",
-   //          "IceCream Sandwich", "Jelly Bean", "KitKat" };
-      List<ObjectStatus> listSATUS=urlconnect.populateTblStatus();
-      // Pie Chart Section Value
-     // double[] distribution = { 0.5, 9.1, 7.8, 45.5, 33.9 };
-
-      // Color of each Pie Chart Sections
-      int[] colors = { Color.BLUE, Color.MAGENTA, Color.GREEN, Color.CYAN,
-              Color.RED,Color.YELLOW,Color.GRAY };
-
-      // Instantiating CategorySeries to plot Pie Chart
-      CategorySeries distributionSeries = new CategorySeries(
-              " Status of Incidents");
-     /* for (int i = 0; i < distribution.length; i++) {
-          // Adding a slice with its values and name to the Pie Chart
-          distributionSeries.add(code[i], distribution[i]);
-      }*/
-      
-      for (int i = 0; i < listSATUS.size(); i++) {
+	/*  for (int i = 0; i < listSATUS.size(); i++) {
           // Adding a slice with its values and name to the Pie Chart
           distributionSeries.add(listSATUS.get(i).getStatusName(), listSATUS.get(i).getStatusTotal());
-      }
-
-      // Instantiating a renderer for the Pie Chart
-      DefaultRenderer defaultRenderer = new DefaultRenderer();
-    /*  for (int i = 0; i < distribution.length; i++) {
-          SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-          seriesRenderer.setColor(colors[i]);
-          seriesRenderer.setDisplayChartValues(true);
-          //Adding colors to the chart
-          defaultRenderer.setBackgroundColor(Color.BLACK);
-          defaultRenderer.setApplyBackgroundColor(true);
-          // Adding a renderer for a slice
-          defaultRenderer.addSeriesRenderer(seriesRenderer);
-          
-
       }*/
-      
-      for (int i = 0; i < listSATUS.size(); i++) {
-          SimpleSeriesRenderer seriesRenderer = new SimpleSeriesRenderer();
-          seriesRenderer.setColor(colors[i]);
-          seriesRenderer.setDisplayChartValues(true);
-          //Adding colors to the chart
-          defaultRenderer.setBackgroundColor(Color.BLACK);
-          defaultRenderer.setApplyBackgroundColor(true);
-          // Adding a renderer for a slice
-          defaultRenderer.addSeriesRenderer(seriesRenderer);
-          
-
-      }
-
-      defaultRenderer
-              .setChartTitle("Weekly Status Summary of Incidents");
-      defaultRenderer.setChartTitleTextSize(14);
-      defaultRenderer.setZoomButtonsVisible(false);
-
-      // Creating an intent to plot bar chart using dataset and
-      // multipleRenderer
-      // Intent intent = ChartFactory.getPieChartIntent(getBaseContext(),
-      // distributionSeries , defaultRenderer, "AChartEnginePieChartDemo");
-
-      // Start Activity
-      // startActivity(intent);
-
-      // this part is used to display graph on the xml
-      LinearLayout chartContainer = (LinearLayout) l;
-      // remove any views before u paint the chart
-      chartContainer.removeAllViews();
-      // drawing pie chart
-      mChart = ChartFactory.getPieChartView(c,
-              distributionSeries, defaultRenderer);
-      // adding the view to the linearlayout
-      chartContainer.addView(mChart);
-
-  }
+	  
+		ArrayList<Entry> yVals1 =new ArrayList<Entry>();
+		
+		for(int i=0; i < listSATUS.size() ;i++)
+			yVals1.add(new Entry(listSATUS.get(i).getStatusTotal(), i));
+		
+		ArrayList<String> xVals1 = new ArrayList<String>();
+		for(int i=0; i < listSATUS.size() ; i++)
+			xVals1.add(listSATUS.get(i).getStatusName());
+		
+		PieDataSet dataSet = new PieDataSet(yVals1, "Status");
+	    dataSet.setSliceSpace(3);
+	    dataSet.setSelectionShift(5);
+	    
+	    //add colors
+	    ArrayList<Integer> colors =new ArrayList<Integer>();
+	    
+	    for(int c : ColorTemplate.VORDIPLOM_COLORS)
+	    	colors.add(c);
+	    
+	    for(int c : ColorTemplate.JOYFUL_COLORS)
+	    	colors.add(c);
+	    
+	    for(int c : ColorTemplate.COLORFUL_COLORS)
+	    	colors.add(c);
+	    
+	    for(int c : ColorTemplate.LIBERTY_COLORS)
+	    	colors.add(c);
+	    
+	    for(int c : ColorTemplate.PASTEL_COLORS)
+	    	colors.add(c);
+	    
+	    colors.add(ColorTemplate.getHoloBlue());
+	    dataSet.setColors(colors);
+	    
+	    PieData data = new PieData(xVals1,dataSet);
+	    data.setValueFormatter(new PercentFormatter());
+	    data.setValueTextSize(11f);
+	    data.setValueTextColor(Color.GRAY);
+	    
+	    mChart.setData(data);
+	    
+	    mChart.highlightValue(null);
+	    
+	    //update pie
+	    mChart.invalidate();
+	    
+	    
+	}
+ 
 }

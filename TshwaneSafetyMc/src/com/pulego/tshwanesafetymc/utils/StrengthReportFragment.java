@@ -53,13 +53,21 @@ public class StrengthReportFragment extends Fragment {
 		rootView=inflater.inflate(R.layout.fragment_strength_layout, container, false);
 
 		ActionBar actionBar = getActivity().getActionBar();
-		 
+		//actionBar.setDisplayOptions(
+		//	    ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+		if(actionBar.isShowing()){
+		 actionBar.removeAllTabs();
+		// actionBar.setDisplayOptions(
+			//	    ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+		// actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		}
+		 actionBar.setDisplayShowCustomEnabled(false);
         // Screen handling while hiding ActionBar icon.
-       actionBar.setDisplayShowHomeEnabled(true);
- 
+         actionBar.setDisplayShowHomeEnabled(true);
+         
         // Screen handling while hiding Actionbar title.
         actionBar.setDisplayShowTitleEnabled(true);
- 
+        //actionBar.setHomeButtonEnabled(isVisible());
         // Creating ActionBar tabs.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
  
@@ -73,12 +81,12 @@ public class StrengthReportFragment extends Fragment {
 		populateStrengthReportListView(rootView.getContext());
 		
 		//++++++++++++++++++++++++++++++++++++++++++++++
-				try{
+			/*	try{
 				  new LoadStrengthReport().execute();
 				}catch(Exception e){
 					Toast.makeText(getActivity(), "Error occured :"+e.getMessage(), Toast.LENGTH_SHORT);
 					Log.d("Error Occured", e.getMessage());
-				}
+				}*/
 				//+++++++++++++++++++++++++++++++++++++++++++++
 		
 		
@@ -94,7 +102,7 @@ public class StrengthReportFragment extends Fragment {
 		//List<StrengthReport> strengthReportList= db.getAllStrengthReportRecords();
 		
 		List<DiploymentCalc> diploymentCalcList = db.getDiploymentCalcRecords();
-		
+		if(diploymentCalcList !=null){
 		Log.d("Data here", diploymentCalcList.get(0).getDate());
 		
 		db.closeDB();
@@ -124,6 +132,8 @@ public class StrengthReportFragment extends Fragment {
 			public void onItemClick(AdapterView<?> adapter, View view, int position,
 					long id) {
 				// TODO Auto-generated method stub
+				//urlcreatereport.populateStrengthReportResult();
+				
 				 HashMap<String, String> obj = (HashMap<String, String>) list.getAdapter().getItem(position);
 		           String data = (String) obj.get("shift");
 		           String date = data.substring(0, data.indexOf(" "));
@@ -135,6 +145,8 @@ public class StrengthReportFragment extends Fragment {
 		           
 		           Log.d("Test Data :", memberNo +" "+ bikesNo +" "+vehiclesNo);
 		           
+		           Toast.makeText(getActivity(), date +" | "+shift, Toast.LENGTH_LONG).show();
+		           
 		           onSelectedIntem(shift,date,memberNo,bikesNo,vehiclesNo);
 		           
 		          // Toast.makeText(rootView.getContext(), date+" "+shift, Toast.LENGTH_LONG).show();
@@ -142,6 +154,10 @@ public class StrengthReportFragment extends Fragment {
 			     
 			}
 		});
+		}else{
+			 Toast.makeText(rootView.getContext(),"diployment is empty", Toast.LENGTH_LONG).show();
+		     
+		}
 	}
 	public void onSelectedIntem(String shift,String date,String memberNo,String bikesNo,String vehiclesNo){
 		Bundle args = new Bundle();

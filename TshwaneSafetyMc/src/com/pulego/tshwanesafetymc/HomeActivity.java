@@ -3,20 +3,13 @@ package com.pulego.tshwanesafetymc;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.BasicStroke;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
+
 
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectNotifications;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectStrengthReport;
 import com.pulego.tshwanesafetymc.utils.AboutFragment;
 import com.pulego.tshwanesafetymc.utils.HelpFragment;
 import com.pulego.tshwanesafetymc.utils.InboxFragment;
-import com.pulego.tshwanesafetymc.utils.InterfaceUtils;
 import com.pulego.tshwanesafetymc.utils.NotificationFragment;
 import com.pulego.tshwanesafetymc.utils.ProfileFragment;
 import com.pulego.tshwanesafetymc.utils.StrengthReportFragment;
@@ -84,19 +77,19 @@ public class HomeActivity extends Activity{
 						GravityCompat.START);
 
 				// Add Drawer Item to dataList
-				dataList.add(new DrawerItem(true)); // adding a spinner to the list
+				//dataList.add(new DrawerItem(true)); // adding a spinner to the list
 
 				dataList.add(new DrawerItem("Main Options")); // adding a header to the list
-				dataList.add(new DrawerItem("Incidents Stats", R.drawable.ic_list_stats));
-				dataList.add(new DrawerItem("Strength Reports", R.drawable.ic_list_report));
-				dataList.add(new DrawerItem("Notifications", R.drawable.ic_list_notification));
-				dataList.add(new DrawerItem("Inbox", R.drawable.ic_list_inbox));
-				dataList.add(new DrawerItem("My Profile", R.drawable.ic_list_profile));
+				dataList.add(new DrawerItem("Incidents Stats", R.drawable.ic_i_statistics));
+				dataList.add(new DrawerItem("Strength Reports", R.drawable.ic_i_reports));
+				dataList.add(new DrawerItem("Notifications", R.drawable.ic_i_notification));
+				dataList.add(new DrawerItem("Inbox", R.drawable.ic_i_inbox));
+				dataList.add(new DrawerItem("My Profile", R.drawable.ic_i_profile));
 
 				 dataList.add(new DrawerItem("Other Option")); // adding a header to the list
-				dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
+				dataList.add(new DrawerItem("About", R.drawable.ic_i_about));
 				//dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
-				dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+				dataList.add(new DrawerItem("Help", R.drawable.ic_i_help));
 
 				adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
 						dataList);
@@ -112,8 +105,9 @@ public class HomeActivity extends Activity{
 						R.drawable.ic_drawer, R.string.drawer_open,
 						R.string.drawer_close) {
 					public void onDrawerClosed(View view) {
-						if(index == 2){
+						if(index == 1){
 						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+						SelectItem(1);
 						}
 						getActionBar().setTitle(mTitle);
 						invalidateOptionsMenu(); // creates call to
@@ -122,6 +116,7 @@ public class HomeActivity extends Activity{
 
 					public void onDrawerOpened(View drawerView) {
 						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+						getActionBar().removeAllTabs();
 						getActionBar().setTitle(mDrawerTitle);
 						invalidateOptionsMenu(); // creates call to
 					    						// onPrepareOptionsMenu()
@@ -133,14 +128,17 @@ public class HomeActivity extends Activity{
 
 				if (savedInstanceState == null) {
 
-					if (dataList.get(0).isSpinner()
+					/*if (dataList.get(0).isSpinner()
 							& dataList.get(1).getTitle() != null) {
 						SelectItem(2);
 					} else if (dataList.get(0).getTitle() != null) {
 						SelectItem(1);
 					} else {
 						SelectItem(0);
-					}
+					}*/
+					if ( dataList.get(0).getTitle() != null) {
+						SelectItem(1);
+					} 
 				}
 
 	}
@@ -158,43 +156,44 @@ public class HomeActivity extends Activity{
 		FragmentManager frgManager = getFragmentManager();
 		switch (possition) {
 
-		case 2:
+		case 1:
 			fragment = new FragmentThree();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 3:
+		case 2:
 			fragment = new StrengthReportFragment();
 			UrlConnectStrengthReport urlcreatereport = new UrlConnectStrengthReport(getApplicationContext());
+			urlcreatereport.populateStrengthReportResult();
 			//populate deployment on the db
 			urlcreatereport.populateDiploymentTB();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			
 			break;
-		case 4:
+		case 3:
 			fragment = new NotificationFragment();
 			UrlConnectNotifications urlfillNotification = new UrlConnectNotifications(getApplicationContext());
 			urlfillNotification.fillNotifications();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 5:
+		case 4:
 			fragment = new InboxFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 6:
+		case 5:
 			fragment = new ProfileFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 8:
+		case 7:
 			fragment = new AboutFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 9:
+		case 8:
 			fragment = new HelpFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();

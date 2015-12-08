@@ -1,43 +1,59 @@
 package com.pulego.tshwanesafetymc.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.chart.BarChart.Type;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
-
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.XAxis.XAxisPosition;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.pulego.tshwanesafetymc.R;
+import com.pulego.tshwanesafetymc.pojos.MyYAxisValueFormatter;
 import com.pulego.tshwanesafetymc.pojos.ObjectType;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectHome;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint.Align;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class BarFragment extends Fragment {
     private View rootView;
 	
 	private LinearLayout chartLayout;
 	   
-	private View mChart; 
+	private View mcChart; 
 	
-    private String[] mMonth = new String[] { "Jan", "Feb", "Mar", "Apr", "May",
-            "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
  
     UrlConnectHome urlConnect;
+    
+    protected BarChart mChart;
+    private SeekBar mSeekBarX, mSeekBarY;
+    private TextView tvX, tvY;
+
+    private Typeface mTf;
+    
+    protected String[] mMonths = new String[] {
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
+    };
+    
 	public BarFragment(){
 		
 	}
@@ -49,161 +65,102 @@ public class BarFragment extends Fragment {
 		   
 		   urlConnect = new UrlConnectHome(rootView.getContext());
 		   
-		   chartLayout=(LinearLayout)rootView.findViewById(R.id.barchart);
+		   //chartLayout=(LinearLayout)rootView.findViewById(R.id.barchart);
 			 
-		   openChart(rootView.getContext(), chartLayout);
+		   //openChart(rootView.getContext(), chartLayout);
+		   //***************************************************************
+		   getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+	                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		   
+		   mChart = (BarChart) rootView.findViewById(R.id.chart3);
+	        //mChart.setOnChartValueSelectedListener(this);
+
+	        mChart.setDrawBarShadow(false);
+	        mChart.setDrawValueAboveBar(true);
+
+	        mChart.setDescription("Weekly summary of types");
+
+	        // if more than 60 entries are displayed in the chart, no values will be
+	        // drawn
+	        mChart.setMaxVisibleValueCount(60);
+
+	        // scaling can now only be done on x- and y-axis separately
+	        mChart.setPinchZoom(false);
+
+	        mChart.setDrawGridBackground(false);
+	        // mChart.setDrawYLabels(false);
+
+	        mTf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
+
+	        XAxis xAxis = mChart.getXAxis();
+	        xAxis.setPosition(XAxisPosition.BOTTOM);
+	        xAxis.setTypeface(mTf);
+	        xAxis.setDrawGridLines(false);
+	        xAxis.setSpaceBetweenLabels(2);
+
+	        YAxisValueFormatter custom = new MyYAxisValueFormatter();
+
+	        YAxis leftAxis = mChart.getAxisLeft();
+	        leftAxis.setTypeface(mTf);
+	        leftAxis.setLabelCount(8, false);
+	        leftAxis.setValueFormatter(custom);
+	        leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART);
+	        leftAxis.setSpaceTop(15f);
+
+	        YAxis rightAxis = mChart.getAxisRight();
+	        rightAxis.setDrawGridLines(false);
+	        rightAxis.setTypeface(mTf);
+	        rightAxis.setLabelCount(8, false);
+	        rightAxis.setValueFormatter(custom);
+	        rightAxis.setSpaceTop(15f);
+
+	        Legend l = mChart.getLegend();
+	        l.setPosition(LegendPosition.BELOW_CHART_LEFT);
+	        l.setForm(LegendForm.SQUARE);
+	        l.setFormSize(9f);
+	        l.setTextSize(11f);
+	        l.setXEntrySpace(4f);
+	        // l.setExtra(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
+	        // "def", "ghj", "ikl", "mno" });
+	        // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
+	        // "def", "ghj", "ikl", "mno" });
+
+	        setData(12, 50);
+		   
+		   //*******************************************************************
 
 		return rootView;
 	}
-	   private void openChart(Context c, LinearLayout l) {
-		   
-		   
-	       // int[] x = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		   
-	      /*  int[] income = { 2000, 2500, 2700, 3000, 2800, 3500, 3700, 3800, 0, 0,
-	                0, 0 };
-	        int[] expense = { 2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0,
-	                0, 0 };
-	        int[] x = { 0, 1, 2, 3, 4, 5, 6 };*/
-	        List<ObjectType> listTYPE= urlConnect.populateTblType();
-	        
-	        // Creating an XYSeries for Income
-	       // XYSeries incomeSeries = new XYSeries("Income");
-	        XYSeries typeSeries = new XYSeries("Type");
-	        // Creating an XYSeries for Expense
-	       // XYSeries expenseSeries = new XYSeries("Expense");
-	        // Adding data to Income and Expense Series
+	   
+
+	    private void setData(int count, float range) {
+			// TODO Auto-generated method stub
+	    	//getting an object of type
+	    	List<ObjectType> listTYPE= urlConnect.populateTblType();
+	    	
+	    	ArrayList<String> xVals = new ArrayList<String>();
+	        for (int i = 0; i <  listTYPE.size(); i++) {
+	            xVals.add(listTYPE.get(i).getTypeName());
+	        }
+
+	        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+
 	        for (int i = 0; i < listTYPE.size(); i++) {
-	        	typeSeries.add(i, listTYPE.get(i).getTotalType());
-	          //  expenseSeries.add(i, expense[i]);
+	           // float mult = (range + 1);
+	           // float val = (float) (Math.random() * mult);
+	            yVals1.add(new BarEntry(listTYPE.get(i).getTotalType(), i));
 	        }
-	 
-	        // Creating a dataset to hold each series
-	        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-	        // Adding Income Series to the dataset
-	        dataset.addSeries(typeSeries);
-	        // Adding Expense Series to dataset
-	        //dataset.addSeries(expenseSeries);
-	 
-	        // Creating XYSeriesRenderer to customize incomeSeries
-	       // XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
-	        XYSeriesRenderer typeRenderer = new XYSeriesRenderer();
-	        typeRenderer.setColor(Color.CYAN); // color of the graph set to cyan
-	        typeRenderer.setFillPoints(true);
-	        typeRenderer.setLineWidth(2);
-	        typeRenderer.setDisplayChartValues(true);
-	        typeRenderer.setDisplayChartValuesDistance(10); // setting chart value
-	                                                            // distance
-	 
-	        // Creating XYSeriesRenderer to customize expenseSeries
-	       /* XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
-	        expenseRenderer.setColor(Color.GREEN);
-	        expenseRenderer.setFillPoints(true);
-	        expenseRenderer.setLineWidth(2);
-	        expenseRenderer.setDisplayChartValues(true);*/
-	 
-	        // Creating a XYMultipleSeriesRenderer to customize the whole chart
-	        XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
-	        multiRenderer
-	                .setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
-	        multiRenderer.setXLabels(0);
-	        multiRenderer.setChartTitle("Weeky Trending Type of Incidents");
-	    
-	        multiRenderer.setXTitle("Name of Types");
-	        multiRenderer.setYTitle("Total Number of Types");
-	        multiRenderer.setBackgroundColor(Color.BLACK);
-	        /***
-	         * Customizing graphs
-	         */
-	        // setting text size of the title
-	        multiRenderer.setChartTitleTextSize(13);
-	        // setting text size of the axis title
-	        multiRenderer.setAxisTitleTextSize(12);
-	        // setting text size of the graph lable
-	        multiRenderer.setLabelsTextSize(12);
-	        // setting zoom buttons visiblity
-	        multiRenderer.setZoomButtonsVisible(false);
-	        // setting pan enablity which uses graph to move on both axis
-	        multiRenderer.setPanEnabled(false, false);
-	        // setting click false on graph
-	        multiRenderer.setClickEnabled(false);
-	        // setting zoom to false on both axis
-	        multiRenderer.setZoomEnabled(false, false);
-	        // setting lines to display on y axis
-	        multiRenderer.setShowGridY(false);
-	        // setting lines to display on x axis
-	        multiRenderer.setShowGridX(false);
-	        // setting legend to fit the screen size
-	        multiRenderer.setFitLegend(true);
-	        // setting displaying line on grid
-	        multiRenderer.setShowGrid(false);
-	        // setting zoom to false
-	        multiRenderer.setZoomEnabled(false);
-	        // setting external zoom functions to false
-	        multiRenderer.setExternalZoomEnabled(false);
-	        // setting displaying lines on graph to be formatted(like using
-	        // graphics)
-	        multiRenderer.setAntialiasing(true);
-	        // setting to in scroll to false
-	        multiRenderer.setInScroll(false);
-	        // setting to set legend height of the graph
-	        multiRenderer.setLegendHeight(30);
-	        // setting x axis label align
-	        multiRenderer.setXLabelsAlign(Align.CENTER);
-	        // setting y axis label to align
-	        multiRenderer.setYLabelsAlign(Align.LEFT);
-	        // setting text style
-	        multiRenderer.setTextTypeface("sans_serif", Typeface.NORMAL);
-	        // setting no of values to display in y axis
-	        multiRenderer.setYLabels(10);
-	        // setting y axis max value, Since i'm using static values inside the
-	        // graph so i'm setting y max value to 4000.
-	        // if you use dynamic values then get the max y value and set here
-	        multiRenderer.setYAxisMax(20);
-	        // setting used to move the graph on xaxiz to .5 to the right
-	        multiRenderer.setXAxisMin(-0.5);
-	        // setting max values to be display in x axis
-	        multiRenderer.setXAxisMax(7);
-	        // setting bar size or space between two bars
-	        multiRenderer.setBarSpacing(0.5);
-	        // Setting background color of the graph to transparent
-	        multiRenderer.setBackgroundColor(Color.BLACK);
-	        
-	        multiRenderer.setMarginsColor(Color.WHITE);
-	        // Setting margin color of the graph to transparent
-	       // multiRenderer.setMarginsColor(getResources().getColor(
-	            //    R.color.transparent_background));
-	        multiRenderer.setApplyBackgroundColor(true);
-	        multiRenderer.setXLabelsAngle(300);
-	        multiRenderer.setBarWidth(10);
-	        multiRenderer.setXLabelsColor(Color.RED);
-	        multiRenderer.setLabelsColor(Color.GREEN);
-	        // setting the margin size for the graph in the order top, left, bottom,
-	        // right
-	        multiRenderer.setMargins(new int[] { 30, 30, 30, 30 });
-	 
-	        for (int i = 0; i <listTYPE.size(); i++) {
-	            multiRenderer.addXTextLabel(i, listTYPE.get(i).getTypeName());
-	        }
-	 
-	        // Adding incomeRenderer and expenseRenderer to multipleRenderer
-	        // Note: The order of adding dataseries to dataset and renderers to
-	        // multipleRenderer
-	        // should be same
-	        multiRenderer.addSeriesRenderer(typeRenderer);
-	        //multiRenderer.addSeriesRenderer(expenseRenderer);
-	 
-	        // this part is used to display graph on the xml
-	        LinearLayout chartContainer = (LinearLayout) l;
-	        // remove any views before u paint the chart
-	        chartContainer.removeAllViews();
-	        // drawing bar chart
-	        mChart = ChartFactory.getBarChartView(c, dataset,
-	                multiRenderer, Type.DEFAULT);
-	 
-	        // adding the view to the linearlayout
-	        chartContainer.addView(mChart);
-	 
-	    }
-	 
+
+	        BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
+	        set1.setBarSpacePercent(35f);
+
+	        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+	        dataSets.add(set1);
+
+	        BarData data = new BarData(xVals, dataSets);
+	        data.setValueTextSize(10f);
+	        data.setValueTypeface(mTf);
+
+	        mChart.setData(data);
+		}
 }

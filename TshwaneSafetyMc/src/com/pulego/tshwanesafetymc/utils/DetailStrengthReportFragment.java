@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -54,7 +55,13 @@ public class DetailStrengthReportFragment extends Fragment {
 	
 	private Dialog dialog;  
 	
+	 ProgressDialog PD;
+	
 	TextView txtTotBikes,txtTotMembers,txtTotVehicle;
+	
+	TableLayout tl;
+    TableRow tr;
+    TextView label;
     
 	public DetailStrengthReportFragment() {
 		super();
@@ -68,7 +75,7 @@ public class DetailStrengthReportFragment extends Fragment {
     	
     	 urlConnectReport = new UrlConnectStrengthReport(rootView.getContext());
     	//populate strength report on the db
-    	 urlConnectReport.populateStrengthReportResult();
+    	// urlConnectReport.populateStrengthReportResult();
     	 
     	 table = (TableLayout) rootView.findViewById(R.id.table);
     	 
@@ -84,7 +91,10 @@ public class DetailStrengthReportFragment extends Fragment {
     	 
     	 shift = getArguments().getString(KEY_SHIFT);
     	 
-    	 Log.d("Details ", date + " "+ shift +" "+getArguments().getInt(KEY_BIKES));
+    	// new CheckLoginDetails().execute();
+
+    	 
+    	 Log.d("Details ", date + " "+ shift );
     	 
     	 int bikes = getArguments().getInt(KEY_BIKES);
     	 
@@ -101,9 +111,29 @@ public class DetailStrengthReportFragment extends Fragment {
     	 txtTotVehicle.setText(""+vehicles);
     	 
     	
-    	 BuildTable();
+         new Thread(new Runnable() {
+             public void run() {
+            	 
+            	         
+  
+            	 getActivity().runOnUiThread(new Runnable() {
+                      
+                     @Override
+                     public void run() {
+                    	 Cursor c = db.readEntry(date, shift);
+                         if(c==null){
+                            Log.d("Cursor Data :", "Oops Cursor is empty");
+                         }else{ 
+                          	addData(c);
+                         }                             
+                     }
+                 });
+                  
+             }
+         }).start();
+
     	 
-    	// populateStrengthTable(date,shift);
+        //populateStrengthTable(date,shift);
     	// new CheckLoginDetails().execute();
     	 
     	 return rootView;
@@ -112,7 +142,9 @@ public class DetailStrengthReportFragment extends Fragment {
 
  		//sqlcon.open();
  		Cursor c = db.readEntry(date, shift);
-
+       if(c==null){
+    	   Log.d("Cursor Data :", "Oops Cursor is empty");
+       }
  		int rows = c.getCount();
  		int cols = c.getColumnCount();
 
@@ -133,162 +165,177 @@ public class DetailStrengthReportFragment extends Fragment {
  						LayoutParams.WRAP_CONTENT));
  				tv.setBackgroundResource(R.drawable.button_layer);
  				tv.setGravity(Gravity.CENTER);
+ 				tv.setTextColor(Color.BLACK);
  				tv.setTextSize(18);
  				tv.setPadding(0, 5, 0, 5);
-
+                
  				tv.setText(c.getString(j));
 
  				row.addView(tv);
-
+ 				 Log.d("Check Table Status:", "In");
  			}
 
  			c.moveToNext();
 
  			table.addView(row);
+ 			
+ 			 Log.d("Check Table Status:", "Out");
 
  		}
  		db.closeDB();
  	}
-     
-     public void populateStrengthTable(String strDate,String strShift){
- 		TableLayout t1;
-        
-         TableLayout tl = (TableLayout)table;
- 		//Create table row header to hold the column headings
-
- 		TableRow tr_head = new TableRow(rootView.getContext());
- 		tr_head.setId(10);
- 		tr_head.setBackgroundColor(Color.GRAY);
- 		tr_head.setLayoutParams(new LayoutParams(
- 		LayoutParams.MATCH_PARENT,
- 		LayoutParams.WRAP_CONTENT));
- 		
-        //Add two data sections to the table row
- 		
- 		TextView label_regions = new TextView(rootView.getContext());
- 		label_regions.setId(20);
- 		label_regions.setText("Regions");
- 		label_regions.setTextColor(Color.WHITE);
- 		label_regions.setPadding(5, 5, 5, 5);
-		 tr_head.addView(label_regions);
- 		
-		 int[] images = {R.drawable.ic_list_person,R.drawable.ic_list_motorcycle,R.drawable.ic_list_car};
- 		
-		 /*
-		 ImageView imageView = new ImageView(rootView.getContext());
-	     imageView.setId(21);
-	     imageView.setImageResource(R.drawable.ic_list_person);
-	     // imageView.setBackgroundColor(Color.GREEN);
-	     imageView.setPadding(5, 5, 5, 5);
-	     tr_head.addView(imageView);// add th
-		 
-	     ImageView imageView2 = new ImageView(rootView.getContext());
-	     imageView.setId(23);
-	     imageView.setImageResource(R.drawable.ic_list_motorcycle);
-	    // imageView.setBackgroundColor(Color.GREEN);
-	     imageView.setPadding(5, 5, 5, 5);
-			 tr_head.addView(imageView);// add th
-			 
-			 ImageView imageView3 = new ImageView(rootView.getContext());
-    	     imageView.setId(25);
-    	     imageView.setImageResource(R.drawable.ic_list_car);
-    	     //imageView.setBackgroundColor(Color.GREEN);
-    	     imageView.setPadding(5, 5, 5, 5);
-				 tr_head.addView(imageView);// add th
-				 
-				 */
- 		int index=0;
- 		
-      /*  for(int img=0;img > images.length ; img++){
- 		//TextView label_date = new TextView(this);
-        	ImageView imageView = new ImageView(rootView.getContext());
-        	     imageView.setId(20+index);
-        	     imageView.setImageResource(images[img]);
-        	     imageView.setBackgroundColor(Color.GREEN);
-        	     imageView.setPadding(5, 5, 5, 5);
- 				 tr_head.addView(imageView);// add the column to the table row here
- 				 index++;
-        }*/
- 			
- 		//After adding the columns to the table row its time to add the table row the the main table layout that we fetched at the start
-
- 		tl.addView(tr_head, new TableLayout.LayoutParams(
- 						 LayoutParams.MATCH_PARENT,
- 						 LayoutParams.WRAP_CONTENT));
- 						 
- 		//Now in similar fashion you can query the database or any array to get the repeat content, create the column, set properties, and add the same to the table row
-
- 		int count=0;
- 		
-     	
+     @SuppressWarnings({ "rawtypes" })
+     public void addData(Cursor c) {
   
-
-         try {
-        	 
-               List<StrengthReport> reports = db.getAllStrengthReportRecordsPerShift(strDate, strShift);
-                db.closeDB();
-             if (reports != null) {
-                 
-                 // looping through All records
-                 for (int i = 0; i < reports.size(); i++) {
-                	 
-                    StrengthReport objReport = reports.get(i);
-
-                  // Create the table row
-            			TableRow tr = new TableRow(rootView.getContext());
-            			if(count%2!=0) tr.setBackgroundColor(Color.GRAY);
-            			tr.setId(100+count);
-            			tr.setLayoutParams(new LayoutParams(
-            			LayoutParams.MATCH_PARENT,
-            			LayoutParams.WRAP_CONTENT));
-            			
-            			
-            			//Create two columns to add as table data
- 	       			 // Create a TextView to add date
- 	       			TextView labelREGION = new TextView(rootView.getContext());
-	 	       		labelREGION.setId(200+count); 
-		 	       	labelREGION.setText(objReport.getRegion());
-		 	        labelREGION.setPadding(2, 0, 8, 0);
-		 	        labelREGION.setTextColor(Color.WHITE);
- 	       			tr.addView(labelREGION);
- 	       			
- 	       			TextView labelMEMBER = new TextView(rootView.getContext());
- 	         		labelMEMBER.setId(200+count);
- 	            	labelMEMBER.setText(objReport.getMembers());
- 	                labelMEMBER.setPadding(2, 0, 8, 0);
- 	                labelMEMBER.setTextColor(Color.WHITE);
- 	       			tr.addView(labelMEMBER);
- 	       			
- 	       			TextView labelBIKE = new TextView(rootView.getContext());
- 	       	    	labelBIKE.setId(200+count);
-		 	       	labelBIKE.setText(objReport.getBikes());
-		 	        labelBIKE.setTextAlignment(15);
-		 	        labelBIKE.setPadding(2, 0, 8, 0);
-		 	        labelBIKE.setTextColor(Color.WHITE);
-		 	       			tr.addView(labelBIKE);
- 	       			
- 	       			TextView labelVEH = new TextView(rootView.getContext());
- 	       			labelVEH.setId(200+count);
- 	       			labelVEH.setText(objReport.getVehicles());
- 	       		    labelVEH.setPadding(2, 0, 8, 0);
- 	       			labelVEH.setTextColor(Color.WHITE);
- 	       			tr.addView(labelVEH);
- 	       			
- 	       			// finally add this to the table row
- 	       			tl.addView(tr, new TableLayout.LayoutParams(
- 	       									LayoutParams.WRAP_CONTENT,
- 	       									LayoutParams.WRAP_CONTENT));
-                    count++;
-                     
-                 }
-             } else {
-                 // no products found
-                Toast.makeText(rootView.getContext(), "No data found", Toast.LENGTH_SHORT).show();
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
+         addHeader();
+          
+         //for (Iterator i = users.iterator(); i.hasNext();) {
+  
+            // Users p = (Users) i.next();
+          if(c.moveToFirst()){
+        	  do{
+	             /** Create a TableRow dynamically **/
+	             tr = new TableRow(getActivity().getApplicationContext());
+	  
+	             /** Creating a TextView to add to the row **/
+	             label = new TextView(getActivity().getApplicationContext());
+	             label.setText(c.getString(c.getColumnIndex("region")));
+	             label.setId(c.getInt(c.getColumnIndex("_id")));
+	             label.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+	                     LayoutParams.WRAP_CONTENT));
+	             label.setPadding(5, 5, 5, 5);
+	             label.setBackgroundColor(Color.GRAY);
+	             LinearLayout Ll = new LinearLayout(getActivity().getApplicationContext());
+	             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+	                     LayoutParams.WRAP_CONTENT);
+	             params.setMargins(5, 2, 2, 2);
+	             //Ll.setPadding(10, 5, 5, 5);
+	             Ll.addView(label,params);
+	             tr.addView((View)Ll); // Adding textView to tablerow.
+	  
+	             /** Creating Qty Button **/
+	             TextView bikes = new TextView(getActivity().getApplicationContext());
+	             bikes.setText(c.getInt(c.getColumnIndex("bikes")));
+	             bikes.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+	                     LayoutParams.WRAP_CONTENT));
+	             bikes.setPadding(5, 5, 5, 5);
+	             bikes.setBackgroundColor(Color.GRAY);
+	             Ll = new LinearLayout(getActivity().getApplicationContext());
+	             params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+	                     LayoutParams.WRAP_CONTENT);
+	             params.setMargins(0, 2, 2, 2);
+	             //Ll.setPadding(10, 5, 5, 5);
+	             Ll.addView(bikes,params);
+	             tr.addView((View)Ll); // Adding textview to tablerow.
+	  
+	             /** Creating Qty Button **/
+	             TextView vehicles = new TextView(getActivity().getApplicationContext());
+	             vehicles.setText(c.getInt(c.getColumnIndex("vehicles")));
+	             vehicles.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+	                     LayoutParams.WRAP_CONTENT));
+	             vehicles.setPadding(5, 5, 5, 5);
+	             vehicles.setBackgroundColor(Color.RED);
+	             Ll = new LinearLayout(getActivity().getApplicationContext());
+	             params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+	                     LayoutParams.WRAP_CONTENT);
+	             params.setMargins(0, 5, 5, 5);
+	             //Ll.setPadding(10, 5, 5, 5);
+	             Ll.addView(vehicles,params);
+	             tr.addView((View)Ll); // Adding textview to tablerow.
+	             
+	             /** Creating Qty Button **/
+	             TextView members = new TextView(getActivity().getApplicationContext());
+	             members.setText(c.getInt(c.getColumnIndex("members")));
+	             members.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+	                     LayoutParams.WRAP_CONTENT));
+	             members.setPadding(5, 5, 5, 5);
+	             members.setBackgroundColor(Color.RED);
+	             Ll = new LinearLayout(getActivity().getApplicationContext());
+	             params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+	                     LayoutParams.WRAP_CONTENT);
+	             params.setMargins(0, 5, 5, 5);
+	             //Ll.setPadding(10, 5, 5, 5);
+	             table.addView(members,params);
+	             tr.addView((View)Ll); // Adding textview to tablerow.
+	             
+	             
+	              // Add the TableRow to the TableLayout
+	             table.addView(tr, new TableLayout.LayoutParams(
+	                     LayoutParams.FILL_PARENT,
+	                     LayoutParams.WRAP_CONTENT));
+        	  }while(c.moveToNext());
          }
- 	}
+     }
+     public void addHeader(){
+         /** Create a TableRow dynamically **/
+         tr = new TableRow(getActivity().getApplicationContext());
+  
+         /** Creating a TextView to add to the row **/
+         label = new TextView(getActivity().getApplicationContext());
+         label.setText("Regions");
+         label.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                 LayoutParams.WRAP_CONTENT));
+         label.setPadding(5, 5, 5, 5);
+         label.setBackgroundColor(Color.RED);
+         LinearLayout Ll = new LinearLayout(getActivity().getApplicationContext());
+         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                 LayoutParams.WRAP_CONTENT);
+         params.setMargins(5, 5, 5, 5);
+         //Ll.setPadding(10, 5, 5, 5);
+         Ll.addView(label,params);
+         tr.addView((View)Ll); // Adding textView to tablerow.
+  
+         /** Creating Qty Button **/
+         TextView bikes = new TextView(getActivity().getApplicationContext());
+         bikes.setText("No of Bike");
+         bikes.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                 LayoutParams.WRAP_CONTENT));
+         bikes.setPadding(5, 5, 5, 5);
+         bikes.setBackgroundColor(Color.RED);
+         Ll = new LinearLayout(getActivity().getApplicationContext());
+         params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                 LayoutParams.WRAP_CONTENT);
+         params.setMargins(0, 5, 5, 5);
+         //Ll.setPadding(10, 5, 5, 5);
+         Ll.addView(bikes,params);
+         tr.addView((View)Ll); // Adding textview to tablerow.
+         
+         /** Creating Qty Button **/
+         TextView vehicles = new TextView(getActivity().getApplicationContext());
+         vehicles.setText("No of vehicles");
+         vehicles.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                 LayoutParams.WRAP_CONTENT));
+         vehicles.setPadding(5, 5, 5, 5);
+         vehicles.setBackgroundColor(Color.RED);
+         Ll = new LinearLayout(getActivity().getApplicationContext());
+         params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                 LayoutParams.WRAP_CONTENT);
+         params.setMargins(0, 5, 5, 5);
+         //Ll.setPadding(10, 5, 5, 5);
+         Ll.addView(vehicles,params);
+         tr.addView((View)Ll); // Adding textview to tablerow.
+         
+         /** Creating Qty Button **/
+         TextView members = new TextView(getActivity().getApplicationContext());
+         members.setText("No of Members");
+         members.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                 LayoutParams.WRAP_CONTENT));
+         members.setPadding(5, 5, 5, 5);
+         members.setBackgroundColor(Color.RED);
+         Ll = new LinearLayout(getActivity().getApplicationContext());
+         params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                 LayoutParams.WRAP_CONTENT);
+         params.setMargins(0, 5, 5, 5);
+         //Ll.setPadding(10, 5, 5, 5);
+         Ll.addView(members,params);
+         tr.addView((View)Ll); // Adding textview to tablerow.
+         
+          // Add the TableRow to the TableLayout
+         table.addView(tr, new TableLayout.LayoutParams(
+                 LayoutParams.FILL_PARENT,
+                 LayoutParams.WRAP_CONTENT));
+     }
+     
      class CheckLoginDetails extends AsyncTask<String, String, String> {
        	 
          /**
@@ -307,18 +354,22 @@ public class DetailStrengthReportFragment extends Fragment {
          /**
           * Creating product
           * */
-         protected String doInBackground(String... args) {
-        	// try {
-        	//populate strength report on the db
-        	// urlConnectReport.populateStrengthReportResult();
-        	 
-        		 populateStrengthTable(date, shift);
-			//} catch (Exception e) {
-				// TODO: handle exception
-				//Log.d("Details Error", e.getMessage());
-				
-			//}
-         	  
+        protected String doInBackground(String... args) {
+        	
+        	
+            	new Thread(new Runnable() {
+                    public void run() {
+                       
+                      Cursor c = db.readEntry(date, shift);
+                        if(c==null){
+                           Log.d("Cursor Data :", "Oops Cursor is empty");
+                        }else{ 
+                         	addData(c);
+                        }                  
+         
+                    }
+                }).start();
+            	
             return null;
          }
   
@@ -330,4 +381,5 @@ public class DetailStrengthReportFragment extends Fragment {
              pDialog.dismiss();
          }
     }
+     
 }

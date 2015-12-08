@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00B800")));
         actionBar.setIcon(R.drawable.icon);
+
         
         txtEmail=(EditText)findViewById(R.id.email);
         

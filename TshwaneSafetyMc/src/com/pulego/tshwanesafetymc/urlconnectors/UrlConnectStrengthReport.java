@@ -57,7 +57,7 @@ public class UrlConnectStrengthReport {
 	         JSONObject json = jParser.makeHttpRequest(URL_CONNECT_STRENGTH_REPORT, "GET", params);
 	
 	         // Check your log cat for JSON reponse
-	         Log.d("All Incidents: ", json.toString());
+	         Log.d("All strength reports: ", json.toString());
 	
 	         try {
 	             // Checking for SUCCESS TAG
@@ -92,7 +92,7 @@ public class UrlConnectStrengthReport {
 	                     String remarks = c.getString("remarks");
 	                     String nodal_remarks = c.getString("nodal_remarks");
 	                     String nodal_ob_capturedby = c.getString("nodal_ob_capturedby");
-	                     Log.d("id",""+id);
+	                     Log.d("strength reporting id ",""+id);
 	                   
 	                      strengthReport =new StrengthReport(id, date, shift, reported_by,
 	                    		 supervisor, region, members, vehicles, bikes,
@@ -102,6 +102,8 @@ public class UrlConnectStrengthReport {
 	                     long row_Id = db.createStrengthReport(strengthReport);
 	                      if(row_Id==0){
 	                    	  Log.d("Data :", "Exist Already in here");
+	                      }else{
+	                    	  Log.d("Data :","successfully loaded");
 	                      }
 	                  /*  if(ids.isEmpty()){// change to ids.size() == 0
 	                    

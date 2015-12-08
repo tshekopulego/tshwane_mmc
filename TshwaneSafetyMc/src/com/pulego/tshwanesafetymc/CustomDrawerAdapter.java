@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,8 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 			view = inflater.inflate(layoutResID, parent, false);
 			drawerHolder.ItemName = (TextView) view
 					.findViewById(R.id.drawer_itemName);
+			drawerHolder.ItemName.setTypeface(drawerHolder.ItemName.getTypeface(), Typeface.BOLD);
+			
 			drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
 
 		//	drawerHolder.spinner = (Spinner) view
@@ -60,8 +63,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 					.findViewById(R.id.headerLayout);
 			drawerHolder.itemLayout = (LinearLayout) view
 					.findViewById(R.id.itemLayout);
-			drawerHolder.spinnerLayout = (LinearLayout) view
-					.findViewById(R.id.spinnerLayout);
+			//drawerHolder.spinnerLayout = (LinearLayout) view.findViewById(R.id.spinnerLayout);
 
 			view.setTag(drawerHolder);
 
@@ -108,17 +110,18 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 		} else if (dItem.getTitle() != null) {
 			drawerHolder.headerLayout.setVisibility(LinearLayout.VISIBLE);
 			drawerHolder.itemLayout.setVisibility(LinearLayout.INVISIBLE);
-			drawerHolder.spinnerLayout.setVisibility(LinearLayout.INVISIBLE);
+			//drawerHolder.spinnerLayout.setVisibility(LinearLayout.INVISIBLE);
 			drawerHolder.title.setText(dItem.getTitle());
 			Log.d("Getview","Passed4");
 		} else {
 			
 			drawerHolder.headerLayout.setVisibility(LinearLayout.INVISIBLE);
-			drawerHolder.spinnerLayout.setVisibility(LinearLayout.INVISIBLE);
+			//drawerHolder.spinnerLayout.setVisibility(LinearLayout.INVISIBLE);
 			drawerHolder.itemLayout.setVisibility(LinearLayout.VISIBLE);
 
 			drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
 					dItem.getImgResID()));
+			//drawerHolder.ItemName.setTypeface(drawerHolder.ItemName.getTypeface(), Typeface.BOLD);
 			drawerHolder.ItemName.setText(dItem.getItemName());
 			Log.d("Getview","Passed5");
 		}
@@ -130,5 +133,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 		ImageView icon;
 		LinearLayout headerLayout, itemLayout, spinnerLayout;
 		Spinner spinner;
+		
+		
 	}
 }
