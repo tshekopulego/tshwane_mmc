@@ -32,35 +32,44 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "tshwaneSafetyManagerConsole.sqlite";
     
     // Table Names
-    private static final String TABLE_STRENGTH_REPORT = "tbl_strength_report";
-    private static final String TABLE_STRENGTH_QUERY = "tbl_strength_query";
-    private static final String TABLE_NOTIFICATION = "tbl_notifications";
+    public static final String TABLE_STRENGTH_REPORT = "tbl_strength_report";
+    public static final String TABLE_STRENGTH_QUERY = "tbl_strength_query";
+    public static final String TABLE_NOTIFICATION = "tbl_notifications";
+    public static final String TABLE_LOGIN = "tbl_login";
  
     // Common column names
-    private static final String KEY_ID = "_id";
-    private static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_ID = "_id";
+    public static final String KEY_CREATED_AT = "created_at";
     
+    //login column names
+    public static final String ROW_USERNAME ="username";
+    public static final String ROW_USER_FULLNAME="user_full_name";
+    public static final String ROW_USER_PHONE="user_phone";
+    public static final String ROW_USER_PAYSAL="user_paysal";
+    public static final String ROW_USER_PROFILEPIC="profile_img";
+    public static final String ROW_USER_EMAIL="user_email";
+    public static final String ROW_USER_LOGIN_STATUS="user_status";
     //Strength report column
-    private static final String ID = "id";
-   	private static final String DATE ="date";
-   	private static final String SHIFT ="shift";
-   	private static final String REPORTED_BY = "reported_by";
-   	private static final String SUPERVISOR = "supervisor";
-   	private static final String REGION = "region";
-   	private static final String MEMBERS = "members";
-   	private static final String VEHICLES = "vehicles";
-   	private static final String BIKES = "bikes";
-   	private static final String REGION_OB = "region_ob";
-   	private static final String NODAL_OB = "nodal_ob";
-   	private static final String REMARKS = "remarks";
-   	private static final String NODAL_REMARKS = "nodal_remarks";
-   	private static final String NODAL_OB_CAPTUREDBY = "nodal_ob_capturedby";
+    public static final String ID = "_id";
+    public static final String DATE ="date";
+    public static final String SHIFT ="shift";
+    public static final String REPORTED_BY = "reported_by";
+    public static final String SUPERVISOR = "supervisor";
+    public static final String REGION = "region";
+    public static final String MEMBERS = "members";
+    public static final String VEHICLES = "vehicles";
+    public static final String BIKES = "bikes";
+    public static final String REGION_OB = "region_ob";
+    public static final String NODAL_OB = "nodal_ob";
+    public static final String REMARKS = "remarks";
+    public static final String NODAL_REMARKS = "nodal_remarks";
+    public static final String NODAL_OB_CAPTUREDBY = "nodal_ob_capturedby";
    	
    	//diployment calculations column
-   	private static final String TOT_BIKES = "tot_bikes";
-   	private static final String TOT_MEMBERS = "tot_members";
-   	private static final String TOT_VEHICLES = "tot_vehicles";
-   	private static final String PROGRASS = "prograss";
+    public static final String TOT_BIKES = "tot_bikes";
+    public static final String TOT_MEMBERS = "tot_members";
+    public static final String TOT_VEHICLES = "tot_vehicles";
+    public static final String PROGRASS = "prograss";
    	
    	//Notifications column
    	public static final String NOTIFI_TITLE="title";
@@ -74,8 +83,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
    	public static final String NOTIFI_PUBLISHEDBY="publishedby";
    	public static final String NOTIFI_UPDATEDDATE="updated_date";
    	public static final String NOTIFI_UPDATEDBY="updated_by";
-    
- // Todo table create statement
+ // login table create statement
     private static final String CREATE_TABLE_STRENGTH_REPORT = "CREATE TABLE "
             + TABLE_STRENGTH_REPORT + "(" + KEY_ID + " INTEGER PRIMARY KEY," + DATE
             + " TEXT,"  + SHIFT
@@ -93,7 +101,19 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + " TEXT," + KEY_CREATED_AT
             + " DATETIME" + ")";
 
- // Todo table create statement
+ // strength report table create statement
+    private static final String CREATE_TABLE_LOGIN = "CREATE TABLE "
+            + TABLE_LOGIN + "(" + KEY_ID + " INTEGER PRIMARY KEY," + ROW_USERNAME
+            + " TEXT,"  + ROW_USER_EMAIL
+            + " TEXT," + ROW_USER_FULLNAME
+            + " TEXT," + ROW_USER_PAYSAL
+            + " TEXT," + ROW_USER_PHONE
+            + " TEXT," + ROW_USER_PROFILEPIC
+            + " TEXT," + ROW_USER_LOGIN_STATUS
+            + " TEXT,"  + KEY_CREATED_AT
+            + " DATETIME" + ")";
+
+ // strength calculations table create statement
     private static final String CREATE_TABLE_STRENGTH_QUERY = "CREATE TABLE "
             + TABLE_STRENGTH_QUERY + "(" + KEY_ID + " INTEGER PRIMARY KEY," + DATE
             + " TEXT,"  + SHIFT
@@ -131,7 +151,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_NOFICATION);
         db.execSQL(CREATE_TABLE_STRENGTH_REPORT);
         db.execSQL(CREATE_TABLE_STRENGTH_QUERY);
-        
+        db.execSQL(CREATE_TABLE_LOGIN);
 	}
 
 	@Override
@@ -140,7 +160,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STRENGTH_QUERY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STRENGTH_REPORT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION);
- 
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
         // create new tables
         onCreate(db);
 	}

@@ -5,14 +5,14 @@ import java.util.List;
 
 
 
+import com.pulego.tshwanesafetymc.ui.AboutFragment;
+import com.pulego.tshwanesafetymc.ui.HelpFragment;
+import com.pulego.tshwanesafetymc.ui.InboxFragment;
+import com.pulego.tshwanesafetymc.ui.NotificationFragment;
+import com.pulego.tshwanesafetymc.ui.ProfileFragment;
+import com.pulego.tshwanesafetymc.ui.StrengthReportFragment;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectNotifications;
 import com.pulego.tshwanesafetymc.urlconnectors.UrlConnectStrengthReport;
-import com.pulego.tshwanesafetymc.utils.AboutFragment;
-import com.pulego.tshwanesafetymc.utils.HelpFragment;
-import com.pulego.tshwanesafetymc.utils.InboxFragment;
-import com.pulego.tshwanesafetymc.utils.NotificationFragment;
-import com.pulego.tshwanesafetymc.utils.ProfileFragment;
-import com.pulego.tshwanesafetymc.utils.StrengthReportFragment;
 
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -21,6 +21,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.Notification;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
@@ -52,11 +55,16 @@ public class HomeActivity extends Activity{
 
 	List<DrawerItem> dataList;
 
+	String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
+		 sharedpreferences  =  getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		 
+		 
 		//Calling an action bar Class
 		ActionBar actionBar=getActionBar();
 		
@@ -79,17 +87,17 @@ public class HomeActivity extends Activity{
 				// Add Drawer Item to dataList
 				//dataList.add(new DrawerItem(true)); // adding a spinner to the list
 
-				dataList.add(new DrawerItem("Main Options")); // adding a header to the list
+				//dataList.add(new DrawerItem("Main Options")); // adding a header to the list
 				dataList.add(new DrawerItem("Incidents Stats", R.drawable.ic_i_statistics));
 				dataList.add(new DrawerItem("Strength Reports", R.drawable.ic_i_reports));
 				dataList.add(new DrawerItem("Notifications", R.drawable.ic_i_notification));
-				dataList.add(new DrawerItem("Inbox", R.drawable.ic_i_inbox));
+				//dataList.add(new DrawerItem("Inbox", R.drawable.ic_i_inbox));
 				dataList.add(new DrawerItem("My Profile", R.drawable.ic_i_profile));
 
-				 dataList.add(new DrawerItem("Other Option")); // adding a header to the list
+				// dataList.add(new DrawerItem("Other Option")); // adding a header to the list
 				dataList.add(new DrawerItem("About", R.drawable.ic_i_about));
-				//dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
-				dataList.add(new DrawerItem("Help", R.drawable.ic_i_help));
+				dataList.add(new DrawerItem("Logout", R.drawable.ic_logout));
+				//dataList.add(new DrawerItem("Help", R.drawable.ic_i_help));
 
 				adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
 						dataList);
@@ -105,9 +113,9 @@ public class HomeActivity extends Activity{
 						R.drawable.ic_drawer, R.string.drawer_open,
 						R.string.drawer_close) {
 					public void onDrawerClosed(View view) {
-						if(index == 1){
-						getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-						SelectItem(1);
+						if(index == 0){
+						//getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+						SelectItem(0);
 						}
 						getActionBar().setTitle(mTitle);
 						invalidateOptionsMenu(); // creates call to
@@ -137,8 +145,10 @@ public class HomeActivity extends Activity{
 						SelectItem(0);
 					}*/
 					if ( dataList.get(0).getTitle() != null) {
-						SelectItem(1);
-					} 
+						SelectItem(0);
+					} else{
+						SelectItem(0);
+					}
 				}
 
 	}
@@ -156,12 +166,12 @@ public class HomeActivity extends Activity{
 		FragmentManager frgManager = getFragmentManager();
 		switch (possition) {
 
-		case 1:
+		case 0:
 			fragment = new FragmentThree();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 2:
+		case 1:
 			fragment = new StrengthReportFragment();
 			UrlConnectStrengthReport urlcreatereport = new UrlConnectStrengthReport(getApplicationContext());
 			urlcreatereport.populateStrengthReportResult();
@@ -171,32 +181,39 @@ public class HomeActivity extends Activity{
 			.commit();
 			
 			break;
-		case 3:
+		case 2:
 			fragment = new NotificationFragment();
 			UrlConnectNotifications urlfillNotification = new UrlConnectNotifications(getApplicationContext());
 			urlfillNotification.fillNotifications();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 4:
+		/*case 3:
 			fragment = new InboxFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
-			break;
-		case 5:
+			break;*/
+		case 3:
 			fragment = new ProfileFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 7:
+		case 4:
 			fragment = new AboutFragment();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
 			.commit();
 			break;
-		case 8:
-			fragment = new HelpFragment();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-			.commit();
+		case 5:
+			SharedPreferences.Editor editor = sharedpreferences.edit();
+			
+			editor.clear();
+			editor.commit();
+		   
+			Intent sigin =new Intent(getApplicationContext(),MainActivity.class);
+			sigin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			sigin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(sigin);
+			
 			break;
 		
 		default:

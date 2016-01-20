@@ -5,10 +5,10 @@ package com.pulego.tshwanesafetymc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pulego.tshwanesafetymc.utils.BarFragment;
-import com.pulego.tshwanesafetymc.utils.InterfaceUtils;
-import com.pulego.tshwanesafetymc.utils.LineFragment;
-import com.pulego.tshwanesafetymc.utils.PieFragment;
+import com.pulego.tshwanesafetymc.ui.BarFragment;
+import com.pulego.tshwanesafetymc.ui.InterfaceUtils;
+import com.pulego.tshwanesafetymc.ui.LineFragment;
+import com.pulego.tshwanesafetymc.ui.PieFragment;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -100,9 +100,9 @@ public class FragmentThree extends Fragment implements TabListener{
 		        
 		        
 		        //initializing all the tabs
-		        com.pulego.tshwanesafetymc.utils.TabListener bar=new com.pulego.tshwanesafetymc.utils.TabListener(barFragmentTab);
-		        com.pulego.tshwanesafetymc.utils.TabListener pie=new com.pulego.tshwanesafetymc.utils.TabListener(pieFragmentTab);
-		        com.pulego.tshwanesafetymc.utils.TabListener line=new com.pulego.tshwanesafetymc.utils.TabListener(lineFragmentTab);
+		        com.pulego.tshwanesafetymc.ui.TabListener bar=new com.pulego.tshwanesafetymc.ui.TabListener(barFragmentTab);
+		        com.pulego.tshwanesafetymc.ui.TabListener pie=new com.pulego.tshwanesafetymc.ui.TabListener(pieFragmentTab);
+		        com.pulego.tshwanesafetymc.ui.TabListener line=new com.pulego.tshwanesafetymc.ui.TabListener(lineFragmentTab);
 		        // Setting tab listeners.
 		        barTab.setTabListener(bar);
 		        pieTab.setTabListener(pie);

@@ -36,8 +36,35 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:stretchColumns="1,0,0"
-            android:id="@+id/table" >
+            android:id="@+id/table"
+            android:shrinkColumns="*"
+           android:stretchColumns="*" >
+            <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:id="@+id/TextView04"
+            android:text="Regions"
+            android:textStyle="bold"
+            android:typeface="serif"></TextView>
+        <TextView
+            android:id="@+id/TextView04"
+            android:text="BikeNo"
+            android:textStyle="bold"
+            android:typeface="serif"></TextView>
+        <TextView
+            android:id="@+id/TextView03"
+            android:text="VihecleNo"
+            android:textStyle="bold"
+            android:typeface="serif"></TextView>
+        <TextView
+            android:id="@+id/TextView02"
+            android:text="MemberNo"
+            android:textStyle="bold"
+            android:typeface="serif"></TextView>
+        
+    </TableRow>
         </TableLayout>
     </ScrollView>
         

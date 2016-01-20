@@ -10,5 +10,8 @@
     <string name="title_activity_password_reset">Reset Password</string>
     <string name="title_activity_notifications">Notifications</string>
     <string name="title_activity_splash_screen">Tshwane Safety MC-beta</string>
+    <string name="error">Error</string>
+    <string name="share">Share</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

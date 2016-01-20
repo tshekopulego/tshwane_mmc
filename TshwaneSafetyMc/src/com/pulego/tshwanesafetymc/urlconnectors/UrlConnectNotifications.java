@@ -25,7 +25,7 @@ import com.pulego.tshwanesafetymc.R;
 import com.pulego.tshwanesafetymc.helper.DatabaseOpenHelper;
 import com.pulego.tshwanesafetymc.httpconfig.JSONParser;
 import com.pulego.tshwanesafetymc.pojos.NotificationsObj;
-import com.pulego.tshwanesafetymc.utils.NotificationFragment;
+import com.pulego.tshwanesafetymc.ui.NotificationFragment;
 
 
 public class UrlConnectNotifications {
