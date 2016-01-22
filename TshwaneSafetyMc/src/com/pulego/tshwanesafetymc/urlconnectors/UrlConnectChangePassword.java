@@ -18,7 +18,7 @@ import com.pulego.tshwanesafetymc.pojos.ChangePassword;
 
 public class UrlConnectChangePassword {
    ChangePassword passwordObject;
-   private String URL_CONNECT_NOTIFICATIONS="http://196.33.249.226/android/tshwanesafety/managementconsole/get_notifications.php";
+   
    // Creating JSON Parser object
    JSONParser jParser = new JSONParser();
    //Activity context
@@ -26,7 +26,7 @@ public class UrlConnectChangePassword {
    // JSON Node names
    private static final String TAG_SUCCESS = "success";
    private static final String TAG_REPORT = "reports";
-
+   private static String url_create_product = "http://196.33.249.226/android/tshwanesafety/managementconsole/reset_password_request.php";
    // products JSONArray
    JSONArray reports = null;
 	public UrlConnectChangePassword(ChangePassword passwordObject) {
@@ -48,9 +48,27 @@ public class UrlConnectChangePassword {
 				          // define the parameter
 				          postParameters.add(new BasicNameValuePair("pay_number", payNo));
 				          postParameters.add(new BasicNameValuePair("email_address",email));
-				       postParameters.add(new BasicNameValuePair("password",passwd));
+				          postParameters.add(new BasicNameValuePair("password",passwd));
 				       
-				          String response = null;
+				          JSONObject json = jParser.makeHttpRequest(url_create_product,
+				                    "POST", postParameters);
+				 
+				            // check log cat fro response
+				            Log.d("Password Reset", json.toString());
+				          
+				            // check for success tag
+				            try {
+				                int intSuccess = json.getInt(TAG_SUCCESS);
+				 
+				                if (intSuccess == 1) {
+				                	 success="success";
+					            }else{
+					               success="unsuccess";
+					            }
+				            } catch (JSONException e) {
+				            	Log.e("log_tag", "Error parsing data "+e.toString());
+				            }
+				         /* String response = null;
 				          String returnString;
 				          // call executeHttpPost method passing necessary parameters 192.168.43.88
 				          //
@@ -76,18 +94,10 @@ public class UrlConnectChangePassword {
 					                 Log.e("log_tag", "Error parsing data "+e.toString());
 					         }
 						     
-					         try{
-					          
-					          //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-					       Log.e("log_tag", "Error parsing data "+result);
-					         }
-					         catch(Exception e){
-					          Log.e("log_tag","Error in Display!" + e.toString());;          
-					         }   
-				    
+					       
 				          } catch (Exception e) {
 						     Log.e("log_tag","Error in http connection!!" + e.toString());     
-						   }
+						   }*/
 				   
 		   return success;   
 	   }

@@ -12,8 +12,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -22,8 +25,10 @@ public class PasswordResetActivity extends Activity {
 	private ProgressDialog pDialog; 
     private Dialog dialog;
 	EditText txtPayNumber,txtEmailAddress,txtPassword,txtRe_enterPassword;
+    Button btnConfirmReset;
     String password,payNo,email;
     ChangePassword passwordObject;
+    UrlConnectChangePassword urlChangePassword;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,29 +43,65 @@ public class PasswordResetActivity extends Activity {
         txtEmailAddress =(EditText)findViewById(R.id.txtEmailAddress);
         txtPassword = (EditText)findViewById(R.id.txtPasswordReset);
         txtRe_enterPassword = (EditText)findViewById(R.id.txtRePasswordReset);
-        payNo = txtPayNumber.getText().toString();
-        email = txtEmailAddress.getText().toString();
+        btnConfirmReset = (Button)findViewById(R.id.btnChangePassword);
+       
         
-        if(payNo.isEmpty()==false){
-        	if(email.isEmpty()==false){
-        		 password = comparePassword(txtPassword.getText().toString(),txtRe_enterPassword.getText().toString());
-        	    if(password != null){
-        	    	Toast.makeText(getApplicationContext(), "Please wait changes on prograss..", Toast.LENGTH_SHORT).show();
-        	    	passwordObject=new ChangePassword(payNo, email, password);
-        	    	//Content
-        	    	new ChangePasswordRequest().execute();
-        	    }
-        	}else{
-        		Toast.makeText(getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
-        	}
-        }else{
-        	Toast.makeText(getApplicationContext(), "Enter pay number", Toast.LENGTH_SHORT).show();
-        }
+        btnConfirmReset.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 payNo = txtPayNumber.getText().toString();
+			     email = txtEmailAddress.getText().toString();
+			     Log.d("PAY NO:",payNo);
+			     Log.d("Email address:",email);
+				// if(payNo != " " || payNo != null){
+				   if(payNo.isEmpty()){
+					     Toast.makeText(getApplicationContext(), "Enter pay number", Toast.LENGTH_SHORT).show();
+			        }else{
+			        	
+			        	if(email.isEmpty()){
+			        		Toast.makeText(getApplicationContext(), "Enter email address", Toast.LENGTH_SHORT).show();
+			        	}else{
+			        		 if(txtPassword.getText().toString().isEmpty()){
+							     Toast.makeText(getApplicationContext(), "Enter password", Toast.LENGTH_SHORT).show();
+					        }else{
+					        	
+					        	if(txtRe_enterPassword.getText().toString().isEmpty()){
+					        		Toast.makeText(getApplicationContext(), "Re-enter password", Toast.LENGTH_SHORT).show();
+					        	}else{
+					        		 password = comparePassword(txtPassword.getText().toString(),txtRe_enterPassword.getText().toString());
+						        	    if(password != null){
+						        	    	Toast.makeText(getApplicationContext(), "Please wait changes on prograss..", Toast.LENGTH_SHORT).show();
+						        	    	passwordObject=new ChangePassword(payNo, email, password);
+						        	    	
+						        	    	urlChangePassword = new UrlConnectChangePassword(passwordObject);
+						        	    	//Content
+						        	    	//new ChangePasswordRequest().execute();
+						        	    	
+						        	    	String response=urlChangePassword.changeUserPassword();
+						                	if(response.equalsIgnoreCase("success")){
+						                		Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+						                		startActivity(intent);
+						                	}else{
+						                		Toast.makeText(getApplicationContext(), "request unsuccessful re-try", Toast.LENGTH_SHORT).show();
+						                	}
+						        	    	
+						        	    }
+				        	   }
+					        }
+			        	}
+			        }
+			}
+		});
+        
+       
 	}
 
 	private String comparePassword(String string, String string2) {
 		// TODO Auto-generated method stub
 		String passwd=null;
+		if(string !=null && string2 !=null){
 		if(string.equals(string2)){
 			passwd = string;
 		}else{
@@ -68,6 +109,7 @@ public class PasswordResetActivity extends Activity {
 			txtPassword.setText("");
 			txtRe_enterPassword.setText("");
 			txtPassword.setFocusable(true);
+		}
 		}
 		return passwd;
 	}
@@ -91,7 +133,7 @@ public class PasswordResetActivity extends Activity {
          * */
         protected String doInBackground(String... args) {
         	
-        	UrlConnectChangePassword urlChangePassword = new UrlConnectChangePassword(passwordObject);
+        	
         	String response=urlChangePassword.changeUserPassword();
         	if(response.equalsIgnoreCase("success")){
         		Intent intent= new Intent(getApplicationContext(), MainActivity.class);
